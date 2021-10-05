@@ -54,6 +54,16 @@ var shopBranch = new Schema({
         ref:"Service",
         required: true
     }],
+    payments:[{
+        type:Schema.Types.ObjectId,
+        ref:"Payment",
+        required: true
+    }],
+    shop_category:{
+        type:Schema.Types.ObjectId,
+        ref:"Category",
+        required: true
+    },
     timestamps: true
 });
 

@@ -21,14 +21,9 @@ var vendor = new Schema({
         ref:"ShopBranch",
         required: true
     }],
-    vendor_category:{
+    vendor_category:[{
         type: Schema.Types.ObjectId,
         ref:'Category',
-        required: true
-    },
-    payments:[{
-        type:Schema.Types.ObjectId,
-        ref:"Payment",
         required: true
     }],
     timestamps: true
