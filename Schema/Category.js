@@ -16,6 +16,11 @@ var category = new Schema({
         ref:'Vendor',
         required: true
     }],
+    shop_category:[{
+        type: Schema.Types.ObjectId,
+        ref:'shopBranch',
+        required: true
+    }],
     timestamps: true
 });
 

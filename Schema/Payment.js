@@ -6,9 +6,13 @@ var payment = new Schema({
         type:String,
         required:true
     },
+    payment_date:{
+        type:Date,
+        required:true
+    },
     payment_vendor:{
         type: Schema.Types.ObjectId,
-        ref:'Vendor',
+        ref:'shopBranch',
         required: true
     },
     payment_plan:{

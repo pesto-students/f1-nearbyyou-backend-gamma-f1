@@ -28,9 +28,9 @@ var user = new Schema({
         type: String,
         required: true
     },
-    accessToken: {
-        type: String
-    },
+    // accessToken: {
+    //     type: String
+    // },
     vendors:{
         type:Schema.Types.ObjectId,
         ref:"Vendor"
