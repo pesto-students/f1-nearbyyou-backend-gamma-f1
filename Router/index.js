@@ -3,16 +3,40 @@ var router = express.Router();
 var { groceryDataSchema, loginSchema } = require("../Schema");
 const jwt = require('jsonwebtoken')
 
-//Demo Get Request
-router.get('/demo', function (req, res) {
-    res.send({ status: 'Success GET' })
+//Register
+router.post('/register', function (req, res) {
+    let params = req.body.params;
+    console.log("req.body :- ", params);
+    res.send({ status: 'Success', msg: 'Register Successfully, Please Login' })
 });
 
-
-//Demo Post Request
-router.post('/demo', function (req, res) {
-    console.log("req.body :- ", req.body);
-    res.send({ status: 'Success post' })
+//Login
+router.post('/login', function (req, res) {
+    let params = req.body.params;
+    console.log("req.body :- ", params);
+    res.send({ status: 'Success', msg: 'Login Successfully' })
 });
+
+//Search
+router.post('/search', function (req, res) {
+    let params = req.body.params;
+    console.log("req.body :- ", params);
+    res.send({ status: 'Success' })
+});
+
+//Categoryes List
+router.post('/category', function (req, res) {
+    let params = req.body.params;
+    console.log("req.body :- ", params);
+    res.send({ status: 'Success' })
+});
+
+//Shop List
+router.post('/shop', function (req, res) {
+    let params = req.body.params;
+    console.log("req.body :- ", params);
+    res.send({ status: 'Success' })
+});
+
 
 module.exports = router;
