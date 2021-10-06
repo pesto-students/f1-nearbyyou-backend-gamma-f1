@@ -47,17 +47,15 @@ var shopBranch = new Schema({
     shop_tickets:[{
         type:Schema.Types.ObjectId,
         ref:"Ticket",
-        required: true
     }],
     shop_services:[{
         type:Schema.Types.ObjectId,
         ref:"Service",
-        required: true
     }],
     payments:[{
         type:Schema.Types.ObjectId,
         ref:"Payment",
-        required: true
+        // required: true
     }],
     shop_category:{
         type:Schema.Types.ObjectId,

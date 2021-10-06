@@ -15,8 +15,8 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
-
 app.use("/vendor",require('./Router/vendor.routes'));
+app.use("/ticket",require('./Router/ticket.router'));
 var port = 3003;
 app.set('port', port);
 console.log("server started",port)

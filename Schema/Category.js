@@ -14,12 +14,10 @@ var category = new Schema({
     vendors:[{
         type: Schema.Types.ObjectId,
         ref:'Vendor',
-        required: true
     }],
     shop_category:[{
         type: Schema.Types.ObjectId,
         ref:'shopBranch',
-        required: true
     }],
     timestamps: {
         type: Boolean,

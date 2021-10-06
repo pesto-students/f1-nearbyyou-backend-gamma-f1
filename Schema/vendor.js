@@ -19,7 +19,6 @@ var vendor = new Schema({
     shop_branches: [{
         type: Schema.Types.ObjectId,
         ref: "ShopBranch",
-        required: true
     }],
     vendor_category: [{
         type: Schema.Types.ObjectId,
