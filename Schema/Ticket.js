@@ -35,6 +35,8 @@ var ticket = new Schema({
     },
     hold_status: {
         type: Boolean,
+        default: "accept",
+        enum: ["accept", "reject"]
     },
     ticket_owner: {
         type: Schema.Types.ObjectId,
