@@ -31,12 +31,15 @@ router.post('/category', function (req, res) {
     res.send({ status: 'Success' })
 });
 
+
+
 //Shop List
 router.post('/shop', function (req, res) {
     let params = req.body.params;
     console.log("req.body :- ", params);
     res.send({ status: 'Success' })
 });
+
 
 
 module.exports = router;

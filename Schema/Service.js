@@ -20,7 +20,10 @@ var service = new Schema({
         ref:'shopBranch',
         required: true
     },
-    timestamps: true
+    timestamps: {
+        type: Boolean,
+        default: true
+    }
 });
 
 module.exports = mongoose.model('Service', service);

@@ -46,7 +46,10 @@ var ticket = new Schema({
         ref: "shopBranch",
         required: true
     },
-    timestamps: true
+    timestamps: {
+        type: Boolean,
+        default: true
+    }
 });
 
 module.exports = mongoose.model('Ticket', ticket);
