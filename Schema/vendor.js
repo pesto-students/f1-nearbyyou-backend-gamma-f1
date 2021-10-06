@@ -11,22 +11,25 @@ var vendor = new Schema({
         default: true,
         required: true
     },
-    user_type:{
+    user_type: {
         type: Schema.Types.ObjectId,
-        ref:'User',
+        ref: 'User',
         required: true
     },
-    shop_branches:[{
-        type:Schema.Types.ObjectId,
-        ref:"ShopBranch",
-        required: true
-    }],
-    vendor_category:[{
+    shop_branches: [{
         type: Schema.Types.ObjectId,
-        ref:'Category',
+        ref: "ShopBranch",
         required: true
     }],
-    timestamps: true
+    vendor_category: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
+        required: true
+    }],
+    timestamps: {
+        type: Boolean,
+        default: true
+    }
 });
 
 module.exports = mongoose.model('Vendor', vendor);

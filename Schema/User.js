@@ -39,7 +39,10 @@ var user = new Schema({
         type:Schema.Types.ObjectId,
         ref:"Customer"
     },
-    timestamps: true
+    timestamps: {
+        type: Boolean,
+        default: true
+    }
 });
 
 module.exports = mongoose.model('User', user);

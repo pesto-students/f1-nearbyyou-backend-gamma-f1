@@ -21,7 +21,10 @@ var category = new Schema({
         ref:'shopBranch',
         required: true
     }],
-    timestamps: true
+    timestamps: {
+        type: Boolean,
+        default: true
+    }
 });
 
 module.exports = mongoose.model('Category', category);

@@ -41,7 +41,10 @@ var customer = new Schema({
         ref:"Ticket",
         required: true
     }],
-    timestamps: true
+    timestamps: {
+        type: Boolean,
+        default: true
+    }
 });
 
 module.exports = mongoose.model('Customer', customer);
