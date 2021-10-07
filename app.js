@@ -2,7 +2,6 @@
 const express = require('express');
 const cors = require("cors");
 const path = require('path');
-const indexRouter = require('./Router');
 const connectDB = require('./config/db');
 connectDB()
 
@@ -16,7 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //Define routes 
-// app.use('/', indexRouter);
+app.use('/api/customer', require('./Router/customer.routes'));
 app.use("/api/vendor",require('./Router/vendor.routes'));
 app.use("/api/ticket",require('./Router/ticket.router'));
 
