@@ -35,15 +35,20 @@ exports.updateTicketStatus = async (req, res, next) => {
 
 		let ticket_details = await Ticket.findById(req.params.id);
 		if (!ticket_details) {
-			res.status(404).json({ msg: "Ticket not found" })
+			res.status(400).json({ msg: "Ticket not found" })
 		}
 		const ticketCustomer = await Customer.findById(ticket_details.ticket_owner);
 		if (!ticketCustomer) {
-			res.status(404).json({ msg: "Customer for the ticket not found" })
+			res.status(400).json({ msg: "Customer for the ticket not found" })
 		}
 		updated_ticket = await Ticket.findByIdAndUpdate(req.params.id, { $set: update_status }, { new: true })
 		res.json({
+			status:"success",
 			data: updated_ticket,
+			error: {
+				code: "ticketnotfound",
+				message: "invalid ticket id "
+			}
 		});
 	} catch (error) {
 		console.error(err.message);
