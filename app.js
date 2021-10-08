@@ -4,7 +4,8 @@ const cors = require("cors");
 const path = require('path');
 const indexRouter = require('./Router');
 const connectDB = require('./config/db');
-connectDB()
+connectDB();
+
 
 
 //Create Object

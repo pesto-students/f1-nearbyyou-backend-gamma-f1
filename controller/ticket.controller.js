@@ -9,24 +9,38 @@ const Customer = require('../Schema/Customer');
 exports.getAllTickets = async (req, res) => {
 	const { status } = req.body;
 	try {
-		let ticket_details = await Ticket.find({ticket_status: status});
+		let ticket_details = await Ticket.find({ ticket_status: status });
 		if (!ticket_details) {
-			res.status(404).json({ msg: "Ticket not found" })
+			res.json({
+				status: "failure",
+				message: "Ticket not found",
+				payload: {
+					error: "ticket is not found"
+				}
+			});
 		}
-		console.log(ticket_details);
 		res.json({
-			data: ticket_details,
+			status: "success",
+			message: "tickets found based on status",
+			payload: {
+				data: ticket_details
+			}
 		});
 	} catch (error) {
 		console.error(err.message);
-		res.status(500).send("server error");
+		res.json({
+			status: "failure",
+			message: "server error",
+			payload: {
+				error: "server error"
+			}
+		});
 	}
 }
 
 exports.updateTicketStatus = async (req, res, next) => {
 	const { status, hold_date, hold_time, hold_description } = req.body;
 	try {
-		console.log("status from frontend- ", status);
 		const update_status = {}
 		if (status) update_status.ticket_status = status;
 		if (hold_date) update_status.hold_date = hold_date;
@@ -35,24 +49,44 @@ exports.updateTicketStatus = async (req, res, next) => {
 
 		let ticket_details = await Ticket.findById(req.params.id);
 		if (!ticket_details) {
-			res.status(400).json({ msg: "Ticket not found" })
+			res.json({
+				status: "failure",
+				message: "Ticket not found",
+				payload: {
+					error: "Ticket not found"
+				}
+			});
 		}
+		console.log(ticket_details.ticket_owner)
+
 		const ticketCustomer = await Customer.findById(ticket_details.ticket_owner);
+
+		console.log(ticketCustomer)
 		if (!ticketCustomer) {
-			res.status(400).json({ msg: "Customer for the ticket not found" })
+			res.json({
+				status: "failure",
+				message: "Customer for the ticket not found",
+				payload: {
+					error: "this is an error"
+				}
+			});
 		}
 		updated_ticket = await Ticket.findByIdAndUpdate(req.params.id, { $set: update_status }, { new: true })
 		res.json({
-			status:"success",
-			data: updated_ticket,
-			error: {
-				code: "ticketnotfound",
-				message: "invalid ticket id "
+			status: "success",
+			message: "status of the ticket has been updated successfully",
+			payload: {
+				data: updated_ticket
 			}
 		});
 	} catch (error) {
-		console.error(err.message);
-		res.status(500).send("server error");
+		console.error(error);
+		res.json({
+			status: "failure",
+			message: "server error",
+			payload: {
+				error:  "server error"
+			}
+		});
 	}
-
 }
