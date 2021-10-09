@@ -44,19 +44,19 @@ var shopBranch = new Schema({
         ref:'Vendor',
         required: true
     },
-    shop_tickets:[{
-        type:Schema.Types.ObjectId,
-        ref:"Ticket",
-    }],
-    shop_services:[{
-        type:Schema.Types.ObjectId,
-        ref:"Service",
-    }],
-    payments:[{
-        type:Schema.Types.ObjectId,
-        ref:"Payment",
-        // required: true
-    }],
+    // shop_tickets:[{
+    //     type:Schema.Types.ObjectId,
+    //     ref:"Ticket",
+    // }],
+    // shop_services:[{
+    //     type:Schema.Types.ObjectId,
+    //     ref:"Service",
+    // }],
+    // payments:[{
+    //     type:Schema.Types.ObjectId,
+    //     ref:"Payment",
+    //     required: true
+    // }],
     shop_category:{
         type:Schema.Types.ObjectId,
         ref:"Category",

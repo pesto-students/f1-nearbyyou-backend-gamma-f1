@@ -5,7 +5,9 @@ const { update_ticket_validation_rules, getAllTickets,validate}= require('../mid
 
 
 router.get('/',getAllTickets(), validate, ticketController.getAllTickets);
+// router.get('/:id',ticketController.getTicket);
 router.put('/:id',update_ticket_validation_rules(),validate ,ticketController.updateTicketStatus);
+// router.delete('/:id',ticketController.deleteTicket);
 
 
 module.exports = router;

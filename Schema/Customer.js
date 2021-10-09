@@ -36,10 +36,10 @@ var customer = new Schema({
         ref:'User',
         required: true
     },
-    customer_tickets:[{
-        type:Schema.Types.ObjectId,
-        ref:"Ticket",
-    }],
+    // customer_tickets:[{
+    //     type:Schema.Types.ObjectId,
+    //     ref:"Ticket",
+    // }],
     timestamps: {
         type: Boolean,
         default: true
