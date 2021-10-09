@@ -11,14 +11,14 @@ var category = new Schema({
         default: true,
         required: true
     },
-    vendors:[{
-        type: Schema.Types.ObjectId,
-        ref:'Vendor',
-    }],
-    shop_category:[{
-        type: Schema.Types.ObjectId,
-        ref:'shopBranch',
-    }],
+    // vendors:[{
+    //     type: Schema.Types.ObjectId,
+    //     ref:'Vendor',
+    // }],
+    // shop_category:[{
+    //     type: Schema.Types.ObjectId,
+    //     ref:'shopBranch',
+    // }],
     timestamps: {
         type: Boolean,
         default: true

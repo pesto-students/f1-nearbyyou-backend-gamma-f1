@@ -11,15 +11,15 @@ var vendor = new Schema({
         default: true,
         required: true
     },
-    user_type: {
+    user_id: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    shop_branches: [{
-        type: Schema.Types.ObjectId,
-        ref: "ShopBranch",
-    }],
+    // shop_branches: [{
+    //     type: Schema.Types.ObjectId,
+    //     ref: "ShopBranch",
+    // }],
     vendor_category: [{
         type: Schema.Types.ObjectId,
         ref: 'Category',

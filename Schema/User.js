@@ -31,14 +31,14 @@ var user = new Schema({
     // accessToken: {
     //     type: String
     // },
-    vendors:{
-        type:Schema.Types.ObjectId,
-        ref:"Vendor"
-    },
-    Customer:{
-        type:Schema.Types.ObjectId,
-        ref:"Customer"
-    },
+    // vendors:{
+    //     type:Schema.Types.ObjectId,
+    //     ref:"Vendor"
+    // },
+    // Customer:{
+    //     type:Schema.Types.ObjectId,
+    //     ref:"Customer"
+    // },
     timestamps: {
         type: Boolean,
         default: true
