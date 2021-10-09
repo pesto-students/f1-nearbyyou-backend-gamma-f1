@@ -16,6 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //Define routes 
+app.use('/api/user',require('./Router/index'))
 app.use('/api/customer', require('./Router/customer.routes'));
 app.use("/api/vendor",require('./Router/vendor.routes'));
 app.use("/api/ticket",require('./Router/ticket.router'));

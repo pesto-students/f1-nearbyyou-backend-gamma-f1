@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
+const User = require('../Schema/User');
 
-module.exports = function (req, res, next) {
+
+module.exports = async function (req, res, next) {
     const token = req.header('x-auth-token');
 
     console.log('token :- ', token);
@@ -18,8 +20,11 @@ module.exports = function (req, res, next) {
 
     try {
         const decoded = jwt.verify(token, process.env.JwtSecretKey);
-        // req.user = decoded.user;
-        console.log("decoded.user: - ", decoded.user);
+        const user = await User.findById(decoded._id);
+        req.user_id = decoded._id
+        req.user_role = user.user_role;
+        console.log("user role", user["user_role"])
+        console.log("decoded.user: - ", decoded._id);
         next()
     } catch (err) {
         console.error(err.message);

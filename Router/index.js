@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var { groceryDataSchema, loginSchema } = require("../Schema");
 const jwt = require('jsonwebtoken')
+const userController = require('../controller/user.controller'); 
+
 
 //Register
 router.post('/register', function (req, res) {
@@ -11,11 +13,13 @@ router.post('/register', function (req, res) {
 });
 
 //Login
-router.post('/login', function (req, res) {
-    let params = req.body.params;
-    console.log("req.body :- ", params);
-    res.send({ status: 'Success', msg: 'Login Successfully' })
-});
+// router.post('/login', function (req, res) {
+//     let params = req.body.params;
+//     console.log("req.body :- ", params);
+//     res.send({ status: 'Success', msg: 'Login Successfully' })
+// });
+
+router.post('/login',userController.login )
 
 //Search
 router.post('/search', function (req, res) {
