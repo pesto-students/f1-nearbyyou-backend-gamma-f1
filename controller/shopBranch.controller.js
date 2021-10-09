@@ -123,6 +123,8 @@ exports.deleteShop = async (req, res) => {
 
 
 exports.findAll = async (req, res) => {
+	console.log("user id in findall ->",req.user_id);
+	console.log("user role in findall ->",req.user_role);
 	const vendor_id = "615d87dba1492420b273de81";
 	try {
 		await vendorshop.find({ shop_owner: vendor_id })
