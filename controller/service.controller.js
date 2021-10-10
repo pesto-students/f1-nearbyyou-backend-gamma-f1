@@ -1,28 +1,32 @@
 const Vendor = require('../Schema/Vendor');
-const vendorshop = require('../Schema/ShopBranch');
+const service = require('../Schema/Service');
+const shopbrnach = require('../Schema/ShopBranch');
 
 
 
 //create shop 
-exports.createShop = async (req, res, next) => {
-	const vendor_details = await Vendor.find({ user_id: req.user_id });
-	console.log("vendor ID -> ", vendor_details[0]._id);
-	const vendor_id = vendor_details[0]._id;
-
+exports.createShopService = async (req, res, next) => {
+	const { name, service_description, shop_email } = req.body;
 	try {
-		const newShopDetails = { ...req.body, shop_owner: vendor_id }
-		const newShop = new vendorshop(newShopDetails);
-		await newShop.save()
+		console.log(name, service_description, shop_email)
+		const shop = await shopbrnach.find({ shop_email: shop_email });
+
+
+		console.log("shop id -->", shop[0]._id);
+
+		const newShopService = { name: name, service_description: service_description, service_owner: shop[0]._id }
+		const newService = new service(newShopService);
+		await newService.save()
 			.then(
 				data => {
 					res.json({
 						status: "success",
-						message: "added a branch",
+						message: "added a service",
 						payload: {
 							data: data,
 						}
 					});
-					console.log("newShop is created");
+					console.log("added a service");
 				}
 			)
 			.catch(err => {
@@ -47,28 +51,26 @@ exports.createShop = async (req, res, next) => {
 }
 
 
-//edit shop details
-exports.editShop = async (req, res, next) => {
-	// const vendor_details = await Vendor.find({ user_id: req.user_id });
-	// console.log("vendor ID -> ", vendor_details[0]._id);
-	// const vendor_id = vendor_details[0]._id;
+//edit sservice details
+exports.editShopService = async (req, res, next) => {
+
 	try {
-		let shopbrnachdetails = await vendorshop.findById(req.params.id);
-		if (!shopbrnachdetails) {
+		let serviceDetails = await service.findById(req.params.id);
+		if (!serviceDetails) {
 			res.json({
 				status: "failure",
-				message: "server error",
+				message: "service not found",
 				payload: {
-					error: "shop brnach not found"
+					error: "service not found"
 				}
 			});
 		}
-		await vendorshop.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+		await service.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
 			.then(data => {
 				console.log(data);
 				res.json({
 					status: "success",
-					message: "updated the details of branch",
+					message: "updated the service details",
 					payload: {
 						data: data,
 					}
@@ -79,7 +81,7 @@ exports.editShop = async (req, res, next) => {
 					status: "failure",
 					message: "server error",
 					payload: {
-						error: error.message
+						error: "server error"
 					}
 				});
 			})
@@ -95,50 +97,65 @@ exports.editShop = async (req, res, next) => {
 	}
 }
 
-//delete shop 
-exports.deleteShop = async (req, res) => {
+//delete service
+exports.deleteShopService = async (req, res) => {
 	try {
-		let shop = await vendorshop.findById(req.params.id);
-		if (!shop) {
+		const shopservice = await service.findById(req.params.id);
+		if (!shopservice) {
 			res.json({
 				status: "failure",
-				message: "Shop not found",
+				message: "Service not found",
 				payload: {
-					error: "Shop not found"
+					error: "Service not found"
 				}
 			});
 		}
 
-		shop = await vendorshop.findByIdAndRemove(req.params.id);
-		res.json({
-			status: "success",
-			message: "shop removed"
-		});
+		await service.findByIdAndRemove(req.params.id)
+			.then(data => {
+				res.json({
+					status: "success",
+					message: "service removed"
+				});
+				console.log("service deleted")
+			})
+			.catch(error => {
+				res.json({
+					status: "failure",
+					message: "server error",
+					payload: {
+						error: "server error"
+					}
+				});
+			})
+
+
 	} catch (err) {
+
 		console.error(err.message);
 		res.json({
 			status: "failure",
 			message: "server error",
 			payload: {
-				error: "server error"
+				error: err.message
 			}
 		});
 	}
 }
 
-//find all shop 
-exports.findAll = async (req, res) => {
-	const vendor_details = await Vendor.find({ user_id: req.user_id });
-	console.log("vendor ID -> ", vendor_details[0]._id);
-	const vendor_id = vendor_details[0]._id;
-
+//find all service of shop 
+exports.getShopAllService = async (req, res) => {
+	console.log(" all service is called")
 	try {
-		await vendorshop.find({ shop_owner: vendor_id })
+		const shop = await shopbrnach.find({ shop_email: req.body.shop_email });
+		console.log(req.body.shop_email)
+
+		await service.find({ service_owner: shop[0]._id })
 			.then(data => {
 				console.log(data.length)
 				res.json({
 					status: "success",
-					message: "found details of all branch",
+					message: "found all services for a branch",
 					payload: {
 						data: data,
 					}
@@ -150,7 +167,7 @@ exports.findAll = async (req, res) => {
 					status: "failure",
 					message: "server error",
 					payload: {
-						error: "server error"
+						error: error
 					}
 				});
 			})
@@ -160,7 +177,7 @@ exports.findAll = async (req, res) => {
 			status: "failure",
 			message: "server error",
 			payload: {
-				error: "server error"
+				error: error.message
 			}
 		});
 	}
@@ -168,9 +185,9 @@ exports.findAll = async (req, res) => {
 
 
 //find shop 
-exports.findOneShop = async (req, res) => {
+exports.findOneShopService = async (req, res) => {
 	try {
-		await vendorshop.findById(req.params.id)
+		await service.findById(req.params.id)
 			.then(data => {
 				res.json({
 					status: "success",

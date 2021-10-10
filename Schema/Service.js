@@ -15,11 +15,11 @@ var service = new Schema({
         default: true,
         required: true
     },
-    // service_owner:{
-    //     type: Schema.Types.ObjectId,
-    //     ref:'shopBranch',
-    //     required: true
-    // },
+    service_owner:{
+        type: Schema.Types.ObjectId,
+        ref:'shopBranch',
+        required: true
+    },
     timestamps: {
         type: Boolean,
         default: true
