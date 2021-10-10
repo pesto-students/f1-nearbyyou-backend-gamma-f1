@@ -1,4 +1,6 @@
 const User = require('../Schema/User');
+const Category = require('../Schema/Category');
+const ShopBranch = require('../Schema/ShopBranch')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 
@@ -52,84 +54,230 @@ exports.signup = async (req, res, next) => {
     }
 }
 
-//Login
-exports.login = async (req, res, next) => {
-    const { username, password } = req.body;
-    console.log("Login :- ", { username, password });
-    console.log("Login :- ", { username, password });
-    try {
-
-        let has = await hashPassword(password);
-        console.log("has :- ", has);
-
-        // let data = await User.find({ $and: [{ email: username }, { encrypted_passord: await hashPassword(password) }] });
-
-        let data = await User.find({ email: username });
-
-        console.log("Data :- ", data);
-
-        if (data.length == 1) {
-            console.log("process.env.JwtSecretKey", process.env.JwtSecretKey);
-            const token = jwt.sign({ _id: data[0]._id }, process.env.JwtSecretKey, {
-                expiresIn: 36000,
-            })
-
-            res.send({
-                status: 'success',
-                msg: 'Login Successfully',
-                payload: {
-                    data: {
-                        token: token,
-                        status: true
-                    }
-                }
-            })
-        } else {
-            res.send({
-                status: 'failure',
-                msg: 'Invalid Username or Password !!',
-                payload: {
-                    error: 'Login Fail'
-                }
-            })
-        }
-
-    } catch (error) {
-        res.send({
-            status: 'failure',
-            msg: 'Server Error',
-            payload: {
-                error: 'Server Error'
-            }
-        })
-    }
-
-}
-
 //Search
 exports.search = async (req, res, next) => {
     console.log("req.body :- ", req.body);
+    const { freeText, pincode, category } = req.body;
+    
+    let data = await ShopBranch.find({shop_pincode :  35017 });
+
+    console.log("data :- ", data);
+
     res.send({
         status: 'success',
         msg: 'Search Successfully!!',
         payload: {
             data: {
-                data: 'Search Success'
+                data: data
             }
         }
     })
+
+    // const shopData = {
+    //     shop_name : 'Uma Ele',
+    //     shop_email : 'uma@gmail.com',
+    //     shop_contact_number : '1122554477',
+    //     shop_door_number : '123',
+    //     shop_street :  'althan',
+    //     shop_area : 'althan',
+    //     shop_city_town : 'surat',
+    //     shop_state :'Gujarat',
+    //     shop_pincode:  '35018  ',
+    //     shop_category :'6161bbc1c2822a52d76cbb3b',
+    //     shop_owner : '6161bbc1c2822a52d76cbb3b',
+    //     status: true,          
+    // }
+
+    // const newShop = new shopBranch(shopData);
+    // const data = newShop.save();
+
+    // if (data) {
+    //     res.send({
+    //         status: 'success',
+    //         msg: 'Category Add Successfully',
+    //         payload: {
+    //             data: 'shop add done'
+    //         }
+    //     })
+    // } else {
+    //     res.send({
+    //         status: 'failure',
+    //         msg: 'Something is Wrong, Plese Try Again !!',
+    //         payload: {
+    //             error: 'shop add Fail'
+    //         }
+    //     })
+    // }
+
+
+    //----------------------------------------
+
+    // const CategoryData = {
+    //     name : 'electric',
+    //     status : true
+    // }
+
+    // const newCategory = new Category(CategoryData);
+    // const data = newCategory.save();
+
+    // if (data) {
+    //     res.send({
+    //         status: 'success',
+    //         msg: 'Category Add Successfully',
+    //         payload: {
+    //             data: 'category add done'
+    //         }
+    //     })
+    // } else {
+    //     res.send({
+    //         status: 'failure',
+    //         msg: 'Something is Wrong, Plese Try Again !!',
+    //         payload: {
+    //             error: 'Regiser Fail'
+    //         }
+    //     })
+    // }
+
 }
 
 //Category
 exports.category = async (req, res, next) => {
-    console.log("req.body :- ", req.body);
+    const { type, selectCategory } = req.body;
+
+    let categoryList = await Category.find({});
+
+    let data = ''
+    if (selectCategory && selectCategory != '') {
+        data = await Category.find({ _id: selectCategory });
+    } else {
+        data = await Category.find({});
+    }
+
     res.send({
         status: 'success',
         msg: 'Category Successfully!!',
         payload: {
             data: {
-                data: 'Category Success'
+                data: data,
+                avaliableCategory: categoryList
             }
         }
     })
 }
+
+//Detail
+exports.detail = async (req, res, next) => {
+    console.log("req.body details :- ", req.body);
+    const { shopId } = req.body;
+    
+    let data = await ShopBranch.find({_id :  shopId });
+
+    console.log("Details data :- ", data);
+
+    res.send({
+        status: 'success',
+        msg: 'Search Successfully!!',
+        payload: {
+            data: {
+                data: data
+            }
+        }
+    })
+
+    // const shopData = {
+    //     shop_name : 'Uma Ele',
+    //     shop_email : 'uma@gmail.com',
+    //     shop_contact_number : '1122554477',
+    //     shop_door_number : '123',
+    //     shop_street :  'althan',
+    //     shop_area : 'althan',
+    //     shop_city_town : 'surat',
+    //     shop_state :'Gujarat',
+    //     shop_pincode:  '35018  ',
+    //     shop_category :'6161bbc1c2822a52d76cbb3b',
+    //     shop_owner : '6161bbc1c2822a52d76cbb3b',
+    //     status: true,          
+    // }
+
+    // const newShop = new shopBranch(shopData);
+    // const data = newShop.save();
+
+    // if (data) {
+    //     res.send({
+    //         status: 'success',
+    //         msg: 'Category Add Successfully',
+    //         payload: {
+    //             data: 'shop add done'
+    //         }
+    //     })
+    // } else {
+    //     res.send({
+    //         status: 'failure',
+    //         msg: 'Something is Wrong, Plese Try Again !!',
+    //         payload: {
+    //             error: 'shop add Fail'
+    //         }
+    //     })
+    // }
+
+
+    //----------------------------------------
+
+    // const CategoryData = {
+    //     name : 'electric',
+    //     status : true
+    // }
+
+    // const newCategory = new Category(CategoryData);
+    // const data = newCategory.save();
+
+    // if (data) {
+    //     res.send({
+    //         status: 'success',
+    //         msg: 'Category Add Successfully',
+    //         payload: {
+    //             data: 'category add done'
+    //         }
+    //     })
+    // } else {
+    //     res.send({
+    //         status: 'failure',
+    //         msg: 'Something is Wrong, Plese Try Again !!',
+    //         payload: {
+    //             error: 'Regiser Fail'
+    //         }
+    //     })
+    // }
+
+}
+
+//add ticket
+exports.ticket = async (req, res, next) => {
+    console.log("req.bosy :- ", req.body);
+
+    res.send({
+        status: 'success',
+        msg: 'Ticket Add Successfully!!',
+        payload: {
+            data: {
+                data: 'Ticket Add',
+            }
+        }
+    })
+}
+
+//View ticket
+exports.viewTicket = async (req, res, next) => {
+    console.log("req.bosy :- ", req.body);
+
+    res.send({
+        status: 'success',
+        msg: 'Ticket View Successfully!!',
+        payload: {
+            data: {
+                data: 'Ticket View',
+            }
+        }
+    })
+}
+
