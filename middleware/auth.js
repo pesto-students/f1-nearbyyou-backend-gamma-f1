@@ -23,8 +23,9 @@ module.exports = async function (req, res, next) {
         const user = await User.findById(decoded._id);
         req.user_id = decoded._id
         req.user_role = user.user_role;
-        console.log("user role", user["user_role"])
-        console.log("decoded.user: - ", decoded._id);
+        // console.log("user role", user["user_role"]);
+        // console.log("user name--> ", user.user_name);
+        // console.log("decoded.user: - ", decoded._id);
         next()
     } catch (err) {
         console.error(err.message);

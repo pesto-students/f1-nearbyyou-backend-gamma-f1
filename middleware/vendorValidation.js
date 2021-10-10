@@ -10,25 +10,9 @@ const vendor_create = () =>{
     ]
 }
 
-const add_shop_validate = () =>{
-    return[
-        check('shop_email').not().isEmpty().isEmail().withMessage('Please enter valid email'),
-        check('shop_contact_number').not().isEmpty().withMessage('Contact number is required').isInt(),
-        check('shop_category').not().isEmpty().withMessage('Select a category'),
-        check('shop_door_number').not().isEmpty().withMessage('shop door number is required').isInt(),
-        check('shop_street').not().isEmpty().withMessage('shop street is required'),
-        check('shop_area').not().isEmpty().withMessage('shop area is required'),
-        check('shop_city_town').not().isEmpty().withMessage('shop city is required'),
-        check('shop_state').not().isEmpty().withMessage('shop state is required'),
-        check('shop_pincode').not().isEmpty().withMessage('shop pincode is required'),
-    ]
-}
 
 
-
-
-
-const validate = (req, res, next)=>{
+const validatevendor = (req, res, next)=>{
     const errors = validationResult(req);
     if(errors.isEmpty()){
         return next()
@@ -46,5 +30,5 @@ const validate = (req, res, next)=>{
 }
 
 module.exports = {
-    vendor_create, add_shop_validate,validate
+    vendor_create, validatevendor
 }
