@@ -26,4 +26,7 @@ router.post('/ticket', auth, customerController.ticket);
 //View Ticket
 router.post('/viewTicket', auth, customerController.viewTicket);
 
+//User Details
+router.post('/userDetails', auth, customerController.userDetails);
+
 module.exports = router;
