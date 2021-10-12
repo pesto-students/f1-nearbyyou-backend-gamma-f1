@@ -2,6 +2,7 @@ const User = require('../Schema/User');
 const Category = require('../Schema/Category');
 const ShopBranch = require('../Schema/ShopBranch');
 const Ticket = require('../Schema/Ticket')
+const Customer = require('../Schema/Customer')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 
@@ -11,8 +12,9 @@ async function hashPassword(password) {
 
 //Sign Up
 exports.signup = async (req, res, next) => {
+    console.log("req.body :- ", req.body);
     try {
-        const { user_name, user_role, email, contact_number, password } = req.body;
+        const { user_name, user_role, email, contact_number, door_number, street, area, pincode, city, state, password } = req.body;
 
         const signUpData = {
             user_name: user_name,
@@ -24,27 +26,65 @@ exports.signup = async (req, res, next) => {
         }
 
         const newUser = new User(signUpData);
-        const data = await newUser.save();
+        await newUser.save()
+            .then(data => {
+                console.log("In first data :- ", data);
+                const newCustomer = new Customer({ door_number: door_number, street: street, area: area, city_town: city, state: state, pincode: pincode, status: true, user_type: newUser._id });
+                console.log("newCustomer :- ", newCustomer)
+                newCustomer.save()
+                    .then(data => {
+                        console.log("In second data :- ", data);
+                        res.send({
+                            status: "success",
+                            msg: "successfully registered please login",
+                            payload: {
+                                data: 'register success',
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.log("In second catch :- ", error);
+                        res.send({
+                            status: "failure",
+                            msg: "server error",
+                            payload: {
+                                error: "server error"
+                            }
+                        });
+                    })
 
-        console.log("Data :- ", data);
+                console.log("user is created")
+            })
+            .catch(error => {
+                console.log("In first catch :- ", error);
+                res.json({
+                    status: "failure",
+                    message: "server error",
+                    payload: {
+                        error: "server error"
+                    }
+                });
+            })
 
-        if (data) {
-            res.send({
-                status: 'success',
-                msg: 'Register Successfully, Please Login',
-                payload: {
-                    data: 'Register Success'
-                }
-            })
-        } else {
-            res.send({
-                status: 'failure',
-                msg: 'Something is Wrong, Plese Try Again !!',
-                payload: {
-                    error: 'Regiser Fail'
-                }
-            })
-        }
+        // console.log("Data :- ", data);
+
+        // if (data) {
+        //     res.send({
+        //         status: 'success',
+        //         msg: 'Register Successfully, Please Login',
+        //         payload: {
+        //             data: 'Register Success'
+        //         }
+        //     })
+        // } else {
+        //     res.send({
+        //         status: 'failure',
+        //         msg: 'Something is Wrong, Plese Try Again !!',
+        //         payload: {
+        //             error: 'Regiser Fail'
+        //         }
+        //     })
+        // }
 
 
     } catch (error) {
@@ -349,7 +389,7 @@ exports.viewTicket = async (req, res, next) => {
     }
 }
 
-//View ticket
+//get user details
 exports.userDetails = async (req, res, next) => {
     console.log("req.bosy :- ", req.body);
 
@@ -378,6 +418,31 @@ exports.userDetails = async (req, res, next) => {
             })
         }
 
+    }
+    catch (error) {
+        res.send({
+            status: 'failure',
+            msg: 'Server Error',
+            payload: {
+                error: 'Server Error'
+            }
+        })
+    }
+}
+
+//Edit Profile
+exports.profileEdit = async (req, res, next) => {
+    console.log("req.bosy :- ", req.body);
+    try {
+        res.send({
+            status: 'success',
+            msg: 'Profile Update Successfully!!',
+            payload: {
+                data: {
+                    data: 'Profile Edit Success',
+                }
+            }
+        })
     }
     catch (error) {
         res.send({

@@ -29,4 +29,7 @@ router.post('/viewTicket', auth, customerController.viewTicket);
 //User Details
 router.post('/userDetails', auth, customerController.userDetails);
 
+//Profile Edit
+router.post('/profileEdit', auth, customerController.profileEdit);
+
 module.exports = router;
