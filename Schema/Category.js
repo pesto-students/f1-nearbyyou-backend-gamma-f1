@@ -11,7 +11,10 @@ var category = new Schema({
         default: true,
         required: true
     },
-    // vendors:[{
+    image:{
+        type: String,
+    },
+    // vendors:[{,
     //     type: Schema.Types.ObjectId,
     //     ref:'Vendor',
     // }],

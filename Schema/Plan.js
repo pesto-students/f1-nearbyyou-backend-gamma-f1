@@ -19,11 +19,11 @@ var plan = new Schema({
         default: true,
         required: true
     },
-    vendor_payments:[{
-        type: Schema.Types.ObjectId,
-        ref:'Payment',
-        required: true
-    }],
+    // vendor_payments:[{
+    //     type: Schema.Types.ObjectId,
+    //     ref:'Payment',
+    //     required: true
+    // }],
     timestamps: {
         type: Boolean,
         default: true

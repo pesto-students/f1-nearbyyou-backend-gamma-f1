@@ -20,11 +20,11 @@ var vendor = new Schema({
     //     type: Schema.Types.ObjectId,
     //     ref: "ShopBranch",
     // }],
-    vendor_category: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Category',
-        required: true
-    }],
+    // vendor_category: [{
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'Category',
+    //     required: true
+    // }],
     timestamps: {
         type: Boolean,
         default: true
