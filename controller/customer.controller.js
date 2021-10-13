@@ -142,21 +142,21 @@ exports.search = async (req, res, next) => {
 
 
     // const shopData = {
-    //     shop_name : 'Uma Ele',
-    //     shop_email : 'uma@gmail.com',
-    //     shop_contact_number : '1122554477',
-    //     shop_door_number : '123',
-    //     shop_street :  'althan',
-    //     shop_area : 'althan',
+    //     shop_name : 'Buty Salon',
+    //     shop_email : 'buty@gmail.com',
+    //     shop_contact_number : '8855447799',
+    //     shop_door_number : '321',
+    //     shop_street :  'Pandeshra',
+    //     shop_area : 'Pandeshra',
     //     shop_city_town : 'surat',
     //     shop_state :'Gujarat',
     //     shop_pincode:  '35018  ',
-    //     shop_category :'6161bbc1c2822a52d76cbb3b',
-    //     shop_owner : '6161bbc1c2822a52d76cbb3b',
+    //     shop_category :'6161bb8c56daf3425b39ae5f',
+    //     shop_owner : '6161bb8c56daf3425b39ae5f',
     //     status: true,          
     // }
 
-    // const newShop = new shopBranch(shopData);
+    // const newShop = new ShopBranch(shopData);
     // const data = newShop.save();
 
     // if (data) {
@@ -355,7 +355,11 @@ exports.viewTicket = async (req, res, next) => {
     console.log("Viw Ticket :- ", req.body);
 
     try {
-        let data = await User.find({ ticket_owner: req.body.custID });
+
+        const { custID, status } = req.body;
+
+        let data = await Ticket.find({ $and: [{ ticket_owner: req.body.custID }, { ticket_status: status }] })
+        // let data = await Ticket.find({ ticket_owner: req.body.custID, ticket_status : '' });
 
         if (data) {
             res.send({
