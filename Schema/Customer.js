@@ -31,7 +31,7 @@ var customer = new Schema({
         default: true,
         required: true
     },
-    user_type:{
+    user_id:{
         type: Schema.Types.ObjectId,
         ref:'User',
         required: true

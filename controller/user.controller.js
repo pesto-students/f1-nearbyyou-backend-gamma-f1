@@ -10,7 +10,6 @@ async function hashPassword(password) {
 exports.login = async (req, res, next) => {
     const { username, password } = req.body;
     console.log("Login :- ", { username, password });
-    console.log("Login :- ", { username, password });
     try {
 
         let has = await hashPassword(password);

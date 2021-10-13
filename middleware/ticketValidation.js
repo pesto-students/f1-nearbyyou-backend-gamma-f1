@@ -2,7 +2,7 @@ const {check, validationResult} = require('express-validator');
 
 const update_ticket_validation_rules = () =>{
     return [
-        check('status').not().isEmpty().withMessage('Status is required').isIn(['accept','reject','pending','hold']),
+        check('status').not().isEmpty().withMessage('Status is required').isIn(['new','closed','pending','hold','inprogress']),
         check('hold_date').isISO8601().toDate().optional({ checkFalsy: true }),
         check('hold_time').optional({ checkFalsy: true }),
         check('hold_description').optional({ checkFalsy: true, nullable: true }).isLength({ min: 10 }).withMessage('Please enter minimum 10 characters'),
@@ -10,7 +10,8 @@ const update_ticket_validation_rules = () =>{
 }
 const getAllTickets = () =>{
     return [
-        check('status').not().isEmpty().withMessage('Status is required').isIn(['accept','reject','pending','hold']),
+        check('status').not().isEmpty().withMessage('Status is required').isIn(['new','closed','pending','hold','inprogress']),
+        check('shop_pincode').not().isEmpty().isLength({ min: 6, max: 6  }).withMessage('shop pincode  is required')
     ]
 }
 

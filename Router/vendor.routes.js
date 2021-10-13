@@ -7,6 +7,10 @@ const serviceController = require('../controller/service.controller');
 const auth=require('../middleware/auth');
 const { add_shop_validate, edit_shop_validate, validateShop}= require('../middleware/shopValidation');
 const {add_shop_service_validate, getservice, validateService} = require('../middleware/serviceValidation');
+
+
+
+
 //vendor sign up api route
 router.post('/signup',vendor_create(),validatevendor, vendorController.signup);
 
