@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 const ticketController = require('../controller/ticket.controller'); 
 const { update_ticket_validation_rules, getAllTickets,validate}= require('../middleware/ticketValidation');
+const auth=require('../middleware/auth');
 
-
-router.get('/',getAllTickets(), validate, ticketController.getAllTickets);
-// router.get('/:id',ticketController.getTicket);
-router.put('/:id',update_ticket_validation_rules(),validate ,ticketController.updateTicketStatus);
+//add auth later
+router.get('/', ticketController.getAllTickets);
+router.get('/:id',ticketController.getTicket);
+router.put('/',ticketController.updateTicketStatus);
 // router.delete('/:id',ticketController.deleteTicket);
 
 

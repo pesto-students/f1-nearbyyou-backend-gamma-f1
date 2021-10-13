@@ -7,6 +7,8 @@ const vendor_create = () =>{
         check('password').isLength({ min: 8 }).withMessage('password must have minimun 8 characters'),
         check('role').not().isEmpty().withMessage('role is required').isIn(['customer','vendor']),
         check('contact_number').not().isEmpty().withMessage('Contact number is required').isInt(),
+        check('vendor_category').not().isEmpty().withMessage('please select category'),
+        check('shop_name','Please enter shop name').not().isEmpty()
     ]
 }
 

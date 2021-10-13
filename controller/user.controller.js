@@ -4,6 +4,9 @@ const jwt = require('jsonwebtoken');
 
 exports.login = async (req, res, next) => {
     const { username, password } = req.body;
+
+    console.log("Login :- ", { username, password });
+
     try {
         let data = await User.find({ email: username });
 
