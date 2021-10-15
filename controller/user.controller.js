@@ -8,7 +8,24 @@ exports.login = async (req, res, next) => {
     console.log("Login :- ", { username, password });
 
     try {
-        let data = await User.find({ email: username });
+        // let data = await User.find({ email: username });
+
+        let data = await User.aggregate(
+            [
+                {
+                    '$match': {
+                        'email': username
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'customers',
+                        'localField': '_id',
+                        'foreignField': 'user_type',
+                        'as': 'custDetails'
+                    }
+                }
+            ]
+        )
 
         if (data.length == 1) {
             const isMatch = await bcrypt.compare(password, data[0].encrypted_passord);
@@ -26,11 +43,7 @@ exports.login = async (req, res, next) => {
                             token: token,
                             status: true,
                             userInfo: {
-                                id: data[0]._id,
-                                name: data[0].user_name,
-                                role: data[0].user_role,
-                                email: data[0].email,
-                                contact: data[0].contact_number
+                                data: data
                             }
                         }
                     }

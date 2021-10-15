@@ -38,7 +38,7 @@ var customer = new Schema({
     },
     // customer_tickets:[{
     //     type:Schema.Types.ObjectId,
-    //     ref:"Ticket",
+    //     ref:"Ticket",  
     // }],
     timestamps: {
         type: Boolean,
