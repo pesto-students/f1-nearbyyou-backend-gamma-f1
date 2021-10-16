@@ -5,9 +5,9 @@ const add_shop_validate = () => {
     return [
         check('shop_email').not().isEmpty().isEmail().withMessage('Please enter valid email'),
         check('shop_contact_number').not().isEmpty().isLength({min: 10, max:10}).withMessage('Contact number is required').isInt(),
-        check('shop_category').not().isEmpty().withMessage('Select a category'),
+        // check('shop_category').not().isEmpty().withMessage('Select a category'),
         check('shop_door_number').not().isEmpty().withMessage('shop door number is required').isInt(),
-        check('shop_street').not().isEmpty().withMessage('shop street is required'),
+        check('shop_street','shop street is required'),
         check('shop_area').not().isEmpty().withMessage('shop area is required'),
         check('shop_city_town').not().isEmpty().withMessage('shop city is required'),
         check('shop_state').not().isEmpty().withMessage('shop state is required'),

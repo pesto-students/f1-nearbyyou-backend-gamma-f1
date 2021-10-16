@@ -9,6 +9,7 @@ exports.login = async (req, res, next) => {
 
     try {
         let data = await User.find({ email: username });
+        // console.log(data)
 
         if (data.length == 1) {
             const isMatch = await bcrypt.compare(password, data[0].encrypted_passord);
