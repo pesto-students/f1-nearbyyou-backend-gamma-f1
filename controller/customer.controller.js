@@ -2,9 +2,12 @@ const User = require('../Schema/User');
 const Category = require('../Schema/Category');
 const ShopBranch = require('../Schema/ShopBranch');
 const Ticket = require('../Schema/Ticket')
-const Customer = require('../Schema/Customer')
+const Customer = require('../Schema/Customer');
+const Vendor = require('../Schema/Vendor');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 async function hashPassword(password) {
     return await bcrypt.hash(password, 10);
@@ -139,6 +142,33 @@ exports.search = async (req, res, next) => {
         })
     }
     console.log("req.body :- ", req.body);
+
+    // const vendorData = {
+    //     shop_name : 'Uma Elec',
+    //     status : true,
+    //     user_id :'6169c8e6056f2a5434f99524',
+    // }
+
+    // const newVendor = new Vendor(vendorData);
+
+    // if (newVendor) {
+    //     res.send({
+    //         status: 'success',
+    //         msg: 'vnedor add successfully',
+    //         payload: {
+    //             data: 'shop add done'
+    //         }
+    //     })
+    // } else {
+    //     res.send({
+    //         status: 'failure',
+    //         msg: 'Something is Wrong, Plese Try Again !!',
+    //         payload: {
+    //             error: 'shop add Fail'
+    //         }
+    //     })
+    // }
+
 
 
     // const shopData = {
@@ -299,16 +329,16 @@ exports.ticket = async (req, res, next) => {
     console.log("req.bosy :- ", req.body);
     try {
 
-        const { description, date, time, customerId } = req.body;
+        const { description, date, time, customerId, ticket_status, shop_ticket } = req.body;
 
         const ticket = {
             ticket_number: customerId,
             service_description: description,
             service_date: date,
             service_time: time,
-            ticket_status: 'pending',
+            ticket_status:ticket_status,
             ticket_owner: customerId,
-            shop_ticket: customerId
+            shop_ticket: shop_ticket
         }
 
         const newTicket = new Ticket(ticket);
@@ -358,16 +388,53 @@ exports.viewTicket = async (req, res, next) => {
 
         const { custID, status } = req.body;
 
-        let data = await Ticket.find({ $and: [{ ticket_owner: req.body.custID }, { ticket_status: status }] })
+        console.log("rreq.body :- ", req.body);
+
+        // '$match': {$and: [{ ticket_owner: custID }, { ticket_status: status }] }
+
+        const View_Ticket = await Ticket.aggregate(
+            [
+                {
+                    '$match': {
+                        '$and': [
+                            {
+                                'ticket_owner': ObjectId(custID)
+                            }, {
+                                'ticket_status': status
+                            }
+                        ]
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'shopbranches',
+                        'localField': 'shop_ticket',
+                        'foreignField': '_id',
+                        'as': 'shopdeatils'
+                    }
+                },
+                {
+                    '$lookup': {
+                        'from': 'categories',
+                        'localField': 'shopdeatils.shop_category',
+                        'foreignField': '_id',
+                        'as': 'categoryDetails'
+                    }
+                }
+            ]
+        )
+
+        console.log("View_Ticket Data: - ", View_Ticket);
+
+        // let data = await Ticket.find({ $and: [{ ticket_owner: req.body.custID }, { ticket_status: status }] })
         // let data = await Ticket.find({ ticket_owner: req.body.custID, ticket_status : '' });
 
-        if (data) {
+        if (View_Ticket) {
             res.send({
                 status: 'success',
                 msg: 'View Ticket Successfully!!',
                 payload: {
                     data: {
-                        data: data,
+                        data: View_Ticket,
                     }
                 }
             })
@@ -447,6 +514,46 @@ exports.profileEdit = async (req, res, next) => {
                 }
             }
         })
+    }
+    catch (error) {
+        res.send({
+            status: 'failure',
+            msg: 'Server Error',
+            payload: {
+                error: 'Server Error'
+            }
+        })
+    }
+}
+
+//Category ID
+exports.getCategoryID = async (req, res, next) => {
+    try {
+        const { cname } = req.body;
+
+        let data = await Category.find({ name: cname });
+
+        console.log("category data :-", data)
+
+        if (data) {
+            res.send({
+                status: 'success',
+                msg: 'Category Id Get Successfully!!',
+                payload: {
+                    data: {
+                        data: data,
+                    }
+                }
+            })
+        } else {
+            res.send({
+                status: 'failure',
+                msg: 'Something is Wrong, Plese Try Again !!',
+                payload: {
+                    error: 'Category Search Fail'
+                }
+            })
+        }
     }
     catch (error) {
         res.send({

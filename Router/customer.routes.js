@@ -17,6 +17,9 @@ router.post('/search', auth, customerController.search);
 //Category
 router.post('/category', customerController.category);
 
+//Get Category ID
+router.post('/getCategoryId', customerController.getCategoryID);
+
 //Details
 router.post('/detail', auth, customerController.detail);
 
