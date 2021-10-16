@@ -3,15 +3,15 @@ const { check, validationResult } = require('express-validator');
 
 const add_shop_service_validate = () => {
     return [
-        check('name').not().isEmpty().withMessage('service name is required'),
-        check('shop_email').not().isEmpty().isEmail().withMessage('Please enter valid email'),
+        check('service_name').not().isEmpty().withMessage('service name is required'),
+        check('shop_id').not().isEmpty().withMessage('Please enter valid shop id'),
         check('service_description').not().isEmpty().withMessage('service description cannot be empty'),
     ]
 }
 
-const getservice = () =>{
+const getservice = () => {
     return [
-        check('shop_email').not().isEmpty().isEmail().withMessage('please pass shop email')
+        check('shop_id').not().isEmpty().withMessage('please pass shop email')
     ]
 }
 

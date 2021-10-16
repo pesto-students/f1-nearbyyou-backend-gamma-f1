@@ -6,15 +6,16 @@ const shopbrnach = require('../Schema/ShopBranch');
 
 //create shop 
 exports.createShopService = async (req, res, next) => {
-	const { name, service_description, shop_email } = req.body;
+	const { service_name, service_description, shop_id } = req.body;
 	try {
-		console.log(name, service_description, shop_email)
-		const shop = await shopbrnach.find({ shop_email: shop_email });
+		console.log("inside create service api->", service_name, service_description, shop_id)
+
+		// const shop = await shopbrnach.find({ shop_email: shop_email });
 
 
-		console.log("shop id -->", shop[0]._id);
+		// console.log("shop id -->", shop[0]._id);
 
-		const newShopService = { name: name, service_description: service_description, service_owner: shop[0]._id }
+		const newShopService = { name: service_name, service_description: service_description, service_owner: shop_id }
 		const newService = new service(newShopService);
 		await newService.save()
 			.then(
@@ -34,7 +35,7 @@ exports.createShopService = async (req, res, next) => {
 					status: "failure",
 					message: "server error",
 					payload: {
-						error: "there is an error in adding shop deatils"
+						error: err.message
 					}
 				});
 			})
@@ -44,9 +45,10 @@ exports.createShopService = async (req, res, next) => {
 			status: "failure",
 			message: "server error",
 			payload: {
-				error: "there is an error in adding shop deatils"
+				error: error.message
 			}
 		});
+		console.log(error)
 	}
 }
 
@@ -146,13 +148,11 @@ exports.deleteShopService = async (req, res) => {
 //find all service of shop 
 exports.getShopAllService = async (req, res) => {
 	console.log(" all service is called")
+	console.log("params id->",req.params.id)
 	try {
-		const shop = await shopbrnach.find({ shop_email: req.body.shop_email });
-		console.log(req.body.shop_email)
-
-		await service.find({ service_owner: shop[0]._id })
+		await service.find({ service_owner: req.params.id })
 			.then(data => {
-				console.log(data.length)
+				console.log(data)
 				res.json({
 					status: "success",
 					message: "found all services for a branch",

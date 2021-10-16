@@ -128,8 +128,8 @@ exports.getAllTickets = async (req, res) => {
 	const vendor_details = await Vendor.find({ user_id: req.user_id });
 	const vendor_id = vendor_details[0]._id;
 	const { status, shop_pincode } = req.query;
-	console.log("status and pincode is ->", status, typeof (shop_pincode), shop_pincode);
-	console.log("vendor id is -->", vendor_id);
+	// console.log("status and pincode is ->", status,shop_pincode);
+	// console.log("vendor id is -->", vendor_id);
 	try {
 		const shop_details = await vendorshop.aggregate([
 			{
@@ -191,7 +191,7 @@ exports.getAllTickets = async (req, res) => {
 			status: "failure",
 			message: "server error",
 			payload: {
-				error: "server error"
+				error: error.message
 			}
 		});
 	}
