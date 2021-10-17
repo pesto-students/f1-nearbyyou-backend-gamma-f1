@@ -35,4 +35,8 @@ router.post('/userDetails', auth, customerController.userDetails);
 //Profile Edit
 router.post('/profileEdit', auth, customerController.profileEdit);
 
+//Upload Image
+router.post('/uploadImage', auth, customerController.uploadImage);
+
+
 module.exports = router;
