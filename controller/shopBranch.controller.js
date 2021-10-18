@@ -1,16 +1,21 @@
 const Vendor = require('../Schema/Vendor');
 const vendorshop = require('../Schema/ShopBranch');
+const Category = require('../Schema/Category');
 
 
 
 //create shop 
 exports.createShop = async (req, res, next) => {
+	console.log(req.body)
 	const vendor_details = await Vendor.find({ user_id: req.user_id });
 	console.log("vendor ID -> ", vendor_details[0]._id);
 	const vendor_id = vendor_details[0]._id;
+	const category_selected = await Category.find({ name: req.body.shop_category_name });
+	console.log("category selected-->",category_selected)
+	const category_id = category_selected[0]._id;
 
 	try {
-		const newShopDetails = { ...req.body, shop_owner: vendor_id }
+		const newShopDetails = { ...req.body, shop_owner: vendor_id, shop_category: category_id }
 		const newShop = new vendorshop(newShopDetails);
 		await newShop.save()
 			.then(
@@ -30,7 +35,7 @@ exports.createShop = async (req, res, next) => {
 					status: "failure",
 					message: "server error",
 					payload: {
-						error: "there is an error in adding shop deatils"
+						error: err.message
 					}
 				});
 			})
@@ -65,7 +70,7 @@ exports.editShop = async (req, res, next) => {
 		}
 		await vendorshop.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
 			.then(data => {
-				console.log(data);
+				// console.log(data);
 				res.json({
 					status: "success",
 					message: "updated the details of branch",
@@ -128,19 +133,19 @@ exports.deleteShop = async (req, res) => {
 
 //find all shop 
 exports.findAll = async (req, res) => {
+	console.log("hitting shop all api", req.user_id);
 	const vendor_details = await Vendor.find({ user_id: req.user_id });
-	console.log("vendor ID -> ", vendor_details[0]._id);
+	// console.log("vendor ID -> ", vendor_details[0]._id);
 	const vendor_id = vendor_details[0]._id;
 
 	try {
 		await vendorshop.find({ shop_owner: vendor_id })
 			.then(data => {
-				console.log(data.length)
 				res.json({
 					status: "success",
 					message: "found details of all branch",
 					payload: {
-						data: data,
+						data: { data, vendor_details },
 					}
 				});
 			})
@@ -170,24 +175,26 @@ exports.findAll = async (req, res) => {
 //find shop 
 exports.findOneShop = async (req, res) => {
 	try {
-		await vendorshop.findById(req.params.id)
+		console.log(req.query)
+		await vendorshop.findById(req.query.id)
 			.then(data => {
 				res.json({
 					status: "success",
-					message: "found details of all branch",
+					message: "Found details of branch",
 					payload: {
 						data: data,
 					}
 				});
 			})
-			.catch(err => {
+			.catch(error => {
 				res.json({
 					status: "failure",
 					message: "Shop not found",
 					payload: {
-						error: "Shop not found"
+						error: error
 					}
 				});
+				console.log(error.message)
 			})
 	} catch (error) {
 		res.json({

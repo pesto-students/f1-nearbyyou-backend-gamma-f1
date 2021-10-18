@@ -8,24 +8,13 @@ exports.login = async (req, res, next) => {
     console.log("Login :- ", { username, password });
 
     try {
+
+        let data = await User.find({ email: username });
+        // console.log(data)
+
         // let data = await User.find({ email: username });
 
-        let data = await User.aggregate(
-            [
-                {
-                    '$match': {
-                        'email': username
-                    }
-                }, {
-                    '$lookup': {
-                        'from': 'customers',
-                        'localField': '_id',
-                        'foreignField': 'user_type',
-                        'as': 'custDetails'
-                    }
-                }
-            ]
-        )
+        
 
         if (data.length == 1) {
             const isMatch = await bcrypt.compare(password, data[0].encrypted_passord);
