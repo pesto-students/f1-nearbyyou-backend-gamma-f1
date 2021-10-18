@@ -1,4 +1,5 @@
 const Category = require('../Schema/Category');
+const Plan = require('../Schema/Plan');
 
 //Category Listing API
 exports.category = async (req, res, next) => {
@@ -181,6 +182,202 @@ exports.changeCategoryStatus = async (req, res, next) => {
                 msg: 'Something is Wrong, Plese Try Again !! category',
                 payload: {
                     error: 'Category status change Fail'
+                }
+            })
+        }
+    }
+    catch (error) {
+        res.send({
+            status: 'failure',
+            msg: 'Server Error ',
+            payload: {
+                error: 'Server Error'
+            }
+        })
+    }
+}
+
+
+//Plan Listing API
+exports.plan = async (req, res, next) => {
+    try {
+
+        let data = await Plan.find({});        
+
+        if (data) {
+            res.send({
+                status: 'success',
+                msg: 'Plan Successfully!!',
+                payload: {
+                    data: {
+                        data: data,
+                    }
+                }
+            })
+        } else {
+            res.send({
+                status: 'failure',
+                msg: 'Something is Wrong, Plese Try Again !! category',
+                payload: {
+                    error: 'Category Search Fail'
+                }
+            })
+        }
+    }
+    catch (error) {
+        res.send({
+            status: 'failure',
+            msg: 'Server Error Category Data ',
+            payload: {
+                error: 'Server Error'
+            }
+        })
+    }
+}
+
+//Add Edit Plan
+exports.addEditPlan = async (req, res, next) => {
+    try {
+
+        console.log("req.body", req.body);
+
+        const {id, name, type, price, status} = req.body;
+
+        const planData = {
+            name: name,
+            plan_type : type,
+            plan_price : price,
+            status: status
+        }
+
+        if (id != '') {
+            const data = await Plan.findByIdAndUpdate(id, planData);
+            
+            if (data) {
+                res.send({
+                    status: 'success',
+                    msg: 'Plan Update Successfully!!',
+                    payload: {
+                        data: {
+                            code: 'Update Plan'
+                        }
+                    }
+                })
+            } else {
+                res.send({
+                    status: 'failure',
+                    msg: 'Something is Wrong, Plese Try Again !!',
+                    payload: {
+                        error: 'Plan Update Fail'
+                    }
+                })
+            }
+        } else {
+            const newCategory = new Category(categoryData);
+            const data = newCategory.save();
+            if (data) {
+                res.send({
+                    status: 'success',
+                    msg: 'Plan Add Successfully!!',
+                    payload: {
+                        data: {
+                            code: 'Plan Added'
+                        }
+                    }
+                })
+            } else {
+                res.send({
+                    status: 'failure',
+                    msg: 'Something is Wrong, Plese Try Again !!',
+                    payload: {
+                        error: 'Plan Add Fail'
+                    }
+                })
+            }
+        }
+    }
+    catch (error) {
+        res.send({
+            status: 'failure',
+            msg: 'Server Error ',
+            payload: {
+                error: 'Server Error'
+            }
+        })
+    }
+}
+
+//Delete Plan API
+exports.deletePlan = async (req, res, next) => {
+    try {
+
+        console.log("Req .srespose: - ", req.body);
+
+        const { id } = req.body
+
+        let data = await Plan.findByIdAndRemove(id);
+
+        console.log("data: - ", data);
+
+        if (data) {
+            res.send({
+                status: 'success',
+                msg: 'Plan Delete Successfully!!',
+                payload: {
+                    data: {
+                        code: 'Delete Plan Success !!'
+                    }
+                }
+            })
+        } else {
+            res.send({
+                status: 'failure',
+                msg: 'Something is Wrong, Plese Try Again !!',
+                payload: {
+                    error: 'Plan Delete Fail'
+                }
+            })
+        }
+    }
+    catch (error) {
+        res.send({
+            status: 'failure',
+            msg: 'Server Error ',
+            payload: {
+                error: 'Server Error'
+            }
+        })
+    }
+}
+
+//Change Plan Status API
+exports.changePlanStatus = async (req, res, next) => {
+    try {
+
+        console.log("Req .srespose: - ", req.body);
+
+        const { id, status } = req.body
+
+        const data = await Plan.findByIdAndUpdate(id, { status: status });
+
+        console.log("data: - ", data);
+
+        if (data) {
+            res.send({
+                status: 'success',
+                msg: `Plan ${status ? 'Active' : 'Inactive'} Successfully!!`,
+                payload: {
+                    data: {
+                        code: 'Plan status  change Success !!'
+                    }
+                }
+            })
+        } else {
+            res.send({
+                status: 'failure',
+                msg: 'Something is Wrong, Plese Try Again !!',
+                payload: {
+                    error: 'Plan status change Fail'
                 }
             })
         }
