@@ -33,4 +33,12 @@ router.post('/deletePlan', adminController.deletePlan);
 //Change Plan Status
 router.post('/changePlanStatus', adminController.changePlanStatus);
 
+
+//Vendor Shop List
+router.post('/vendorList', adminController.vendorList);
+
+//Accept Reject Shop Request 
+router.post('/acceptRejectRequest', adminController.acceptRejectShopRequest);
+
+
 module.exports = router;

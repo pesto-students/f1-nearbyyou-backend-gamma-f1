@@ -1,5 +1,6 @@
 const Category = require('../Schema/Category');
 const Plan = require('../Schema/Plan');
+const ShopBranch = require('../Schema/ShopBranch');
 
 //Category Listing API
 exports.category = async (req, res, next) => {
@@ -202,7 +203,7 @@ exports.changeCategoryStatus = async (req, res, next) => {
 exports.plan = async (req, res, next) => {
     try {
 
-        let data = await Plan.find({});        
+        let data = await Plan.find({});
 
         if (data) {
             res.send({
@@ -241,18 +242,18 @@ exports.addEditPlan = async (req, res, next) => {
 
         console.log("req.body", req.body);
 
-        const {id, name, type, price, status} = req.body;
+        const { id, name, type, price, status } = req.body;
 
         const planData = {
             name: name,
-            plan_type : type,
-            plan_price : price,
+            plan_type: type,
+            plan_price: price,
             status: status
         }
 
         if (id != '') {
             const data = await Plan.findByIdAndUpdate(id, planData);
-            
+
             if (data) {
                 res.send({
                     status: 'success',
@@ -273,8 +274,8 @@ exports.addEditPlan = async (req, res, next) => {
                 })
             }
         } else {
-            const newCategory = new Category(categoryData);
-            const data = newCategory.save();
+            const newPlan = new Plan(planData);
+            const data = newPlan.save();
             if (data) {
                 res.send({
                     status: 'success',
@@ -378,6 +379,125 @@ exports.changePlanStatus = async (req, res, next) => {
                 msg: 'Something is Wrong, Plese Try Again !!',
                 payload: {
                     error: 'Plan status change Fail'
+                }
+            })
+        }
+    }
+    catch (error) {
+        res.send({
+            status: 'failure',
+            msg: 'Server Error ',
+            payload: {
+                error: 'Server Error'
+            }
+        })
+    }
+}
+
+
+//Vendor Listing API
+exports.vendorList = async (req, res, next) => {
+    try {
+
+        const { type } = req.body;
+
+        console.log("Tyep :- ", req.body);
+
+        // let data = await ShopBranch.find({ shop_status: type });
+
+        let data = await ShopBranch.aggregate(
+            [
+                {
+                    '$match': {
+                        'shop_status': type
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'vendors',
+                        'localField': 'shop_owner',
+                        'foreignField': '_id',
+                        'as': 'vendorDetails'
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'categories',
+                        'localField': 'shop_category',
+                        'foreignField': '_id',
+                        'as': 'categoryDeatils'
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'users',
+                        'localField': 'vendorDetails.user_id',
+                        'foreignField': '_id',
+                        'as': 'userDetails'
+                    }
+                }
+            ]
+        )
+
+
+        // console.log("Find Vendor:  ", data);
+
+        if (data) {
+            res.send({
+                status: 'success',
+                msg: 'View Vendor Successfully!!',
+                payload: {
+                    data: {
+                        data: data,
+                    }
+                }
+            })
+        } else {
+            res.send({
+                status: 'failure',
+                msg: 'Something is Wrong, Plese Try Again !!',
+                payload: {
+                    error: 'vendorList fail'
+                }
+            })
+        }
+    }
+    catch (error) {
+        res.send({
+            status: 'failure',
+            msg: 'Server Error',
+            payload: {
+                error: 'Server Error'
+            }
+        })
+    }
+}
+
+//Accept Reject Shop Request
+exports.acceptRejectShopRequest = async (req, res, next) => {
+    try {
+
+        console.log("Req .srespose: - ", req.body);
+
+        const { id, type } = req.body
+
+        const data = await ShopBranch.findByIdAndUpdate(id, { shop_status: type == 'accept' ? 'paymentpending' : 'reject' });
+
+        console.log("data: - ", data);
+
+        if (data) {
+            res.send({
+                status: 'success',
+                msg: `Shop Request Status Change Successfully`,
+                payload: {
+                    data: {
+                        code: 'Change Status Successfully'
+                    }
+                }
+            })
+        } else {
+            res.send({
+                status: 'failure',
+                msg: 'Something is Wrong, Plese Try Again !!',
+                payload: {
+                    error: 'status change Fail'
                 }
             })
         }

@@ -112,11 +112,11 @@ exports.search = async (req, res, next) => {
 
         let query = []
 
-        if(pincode){
-           query.push({shop_pincode : pincode})
+        if (pincode) {
+            query.push({ shop_pincode: pincode })
         }
-        if(category){
-            query.push({shop_category : category})
+        if (category) {
+            query.push({ shop_category: category })
         }
         let data = await ShopBranch.find({ $and: query });
 
@@ -154,14 +154,15 @@ exports.search = async (req, res, next) => {
     console.log("req.body :- ", req.body);
 
     // const vendorData = {
-    //     shop_name : 'Uma Elec',
-    //     status : true,
-    //     user_id :'6169c8e6056f2a5434f99524',
+    //     shop_name: "Hair Look",
+    //     status: true,
+    //     user_id: '6169d7e0d1c161bfc55d0cd1',
     // }
 
     // const newVendor = new Vendor(vendorData);
+    // const data = newVendor.save();
 
-    // if (newVendor) {
+    // if (data) {
     //     res.send({
     //         status: 'success',
     //         msg: 'vnedor add successfully',
@@ -178,7 +179,6 @@ exports.search = async (req, res, next) => {
     //         }
     //     })
     // }
-
 
 
     // const shopData = {
@@ -402,17 +402,29 @@ exports.viewTicket = async (req, res, next) => {
 
         // '$match': {$and: [{ ticket_owner: custID }, { ticket_status: status }] }
 
+        let query = [];
+
+        if (status) {
+            query = [
+                {
+                    'ticket_owner': ObjectId(custID)
+                }, {
+                    'ticket_status': status
+                }
+            ]
+        } else {
+            query = [
+                {
+                    'ticket_owner': ObjectId(custID)
+                }
+            ]
+        }
+
         const View_Ticket = await Ticket.aggregate(
             [
                 {
                     '$match': {
-                        '$and': [
-                            {
-                                'ticket_owner': ObjectId(custID)
-                            }, {
-                                'ticket_status': status
-                            }
-                        ]
+                        '$and': query
                     }
                 }, {
                     '$lookup': {
@@ -608,6 +620,47 @@ exports.uploadImage = async (req, res, next) => {
         res.send({
             status: 'failure',
             msg: 'Server Error',
+            payload: {
+                error: 'Server Error'
+            }
+        })
+    }
+}
+
+//Accept Reject Holding Request
+exports.acceptRejectShopRequest = async (req, res, next) => {
+    try {
+
+        console.log("acceptRejectShopRequest: - ", req.body);
+
+        const { id, type } = req.body
+
+        const data = await Ticket.findByIdAndUpdate(id, { ticket_status: type == 'accept' ? 'in_progress' : 'closed' });
+
+        if (data) {
+            res.send({
+                status: 'success',
+                msg: `Holding Status Successfully`,
+                payload: {
+                    data: {
+                        code: 'Holding  Status Successfully'
+                    }
+                }
+            })
+        } else {
+            res.send({
+                status: 'failure',
+                msg: 'Something is Wrong, Plese Try Again !!',
+                payload: {
+                    error: 'status change Fail'
+                }
+            })
+        }
+    }
+    catch (error) {
+        res.send({
+            status: 'failure',
+            msg: 'Server Error ',
             payload: {
                 error: 'Server Error'
             }
