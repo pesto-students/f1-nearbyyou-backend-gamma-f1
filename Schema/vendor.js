@@ -25,10 +25,8 @@ var vendor = new Schema({
     //     ref: 'Category',
     //     required: true
     // }],
-    timestamps: {
-        type: Boolean,
-        default: true
-    }
+},{
+    timestamps: true
 });
 
 module.exports = mongoose.model('Vendor', vendor);

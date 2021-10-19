@@ -5,6 +5,10 @@ const path = require('path');
 const connectDB = require('./config/db');
 connectDB();
 
+const task = require('./middleware/cornJob/ticketCorn')
+ 
+
+
 
 //Create Object
 const app = express();
@@ -31,6 +35,7 @@ app.use('/api/customer', require('./Router/customer.routes'));
 app.use('/api/admin', require('./Router/admin.routes'));
 app.use("/api/vendor", require('./Router/vendor.routes'));
 app.use("/api/ticket", require('./Router/ticket.router'));
+
 
 app.post('/verification', (req, res) => {
 	// do a validation
@@ -81,6 +86,7 @@ app.post('/api/razorpay', async (req, res) => {
         console.log(error)
     }
 })
+
 
 
 const PORT = process.env.PORT || 3003;

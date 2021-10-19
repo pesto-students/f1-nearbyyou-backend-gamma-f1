@@ -31,19 +31,17 @@ var customer = new Schema({
         default: true,
         required: true
     },
-    user_id:{
+    user_id: {
         type: Schema.Types.ObjectId,
-        ref:'User',
+        ref: 'User',
         required: true
     },
     // customer_tickets:[{
     //     type:Schema.Types.ObjectId,
     //     ref:"Ticket",  
     // }],
-    timestamps: {
-        type: Boolean,
-        default: true
-    }
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model('Customer', customer);
