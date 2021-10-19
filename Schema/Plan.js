@@ -24,10 +24,8 @@ var plan = new Schema({
     //     ref:'Payment',
     //     required: true
     // }],
-    timestamps: {
-        type: Boolean,
-        default: true
-    }
+},{
+    timestamps: true
 });
 
 module.exports = mongoose.model('Plan', plan);

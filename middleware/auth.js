@@ -3,6 +3,7 @@ const User = require('../Schema/User');
 
 
 module.exports = async function (req, res, next) {
+    console.log(req.header)
     const token = req.header('x-auth-token');
 
     console.log('token :- ', token);
@@ -15,7 +16,6 @@ module.exports = async function (req, res, next) {
                 error: 'Token Not Avaliable'
             }
         })
-        // return res.status(401).json({ msg: "No token, authorization denied" })
     }
 
     try {
@@ -23,9 +23,6 @@ module.exports = async function (req, res, next) {
         const user = await User.findById(decoded._id);
         req.user_id = decoded._id
         req.user_role = user.user_role;
-        // console.log("user role", user["user_role"]);
-        // console.log("user name--> ", user.user_name);
-        // console.log("decoded.user: - ", decoded._id);
         next()
     } catch (err) {
         console.error(err.message);

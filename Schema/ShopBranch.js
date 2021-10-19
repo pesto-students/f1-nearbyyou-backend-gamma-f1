@@ -34,6 +34,11 @@ var shopBranch = new Schema({
         type: Number,
         required: true
     },
+    shop_status:{
+        type: 'string',
+        default: "pending",
+        enum:["pending",  "payment_pending", "active","reject"]
+    },
     status: {
         type: Boolean,
         default: true,
@@ -62,10 +67,8 @@ var shopBranch = new Schema({
         ref:"Category",
         required: true
     },
-    timestamps: {
-        type: Boolean,
-        default: true
-    }
+},{
+    timestamps: true
 });
 
 module.exports = mongoose.model('shopBranch', shopBranch);

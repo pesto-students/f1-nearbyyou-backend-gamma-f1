@@ -19,7 +19,9 @@ router.post('/register', function (req, res) {
 //     res.send({ status: 'Success', msg: 'Login Successfully' })
 // });
 
-router.post('/login',userController.login )
+router.post('/login',userController.login );
+
+router.post('/glogin', userController.glogin);
 
 //Search
 router.post('/search', function (req, res) {

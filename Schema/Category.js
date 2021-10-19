@@ -11,7 +11,7 @@ var category = new Schema({
         default: true,
         required: true
     },
-    image:{
+    image: {
         type: String,
     },
     // vendors:[{,
@@ -22,10 +22,9 @@ var category = new Schema({
     //     type: Schema.Types.ObjectId,
     //     ref:'shopBranch',
     // }],
-    timestamps: {
-        type: Boolean,
-        default: true
-    }
-});
+},
+    {
+        timestamps: true
+    });
 
 module.exports = mongoose.model('Category', category);

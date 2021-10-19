@@ -26,7 +26,7 @@ var user = new Schema({
     },
     encrypted_passord: {
         type: String,
-        required: true
+        // required: true
     },
     // accessToken: {
     //     type: String
@@ -39,10 +39,8 @@ var user = new Schema({
     //     type:Schema.Types.ObjectId,
     //     ref:"Customer"
     // },
-    timestamps: {
-        type: Boolean,
-        default: true
-    }
+},{
+    timestamps: true
 });
 
 module.exports = mongoose.model('User', user);
