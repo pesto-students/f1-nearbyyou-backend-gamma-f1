@@ -1,18 +1,18 @@
 const AWS = require('aws-sdk');
 
 const s3 = new AWS.S3({
-    accessKeyId: 'AKIATWX57TAJWTIJUIHK',
-    secretAccessKey: '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',
-    region: 'us-east-1',
+    accessKeyId: 'AKIA3G5F4IDZWMU5QZTP',
+    secretAccessKey: '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',
+    region: 'us-east-2',
     s3BucketEndpoint: true,
-    endpoint: "http://homesweb.s3.amazonaws.com"
+    endpoint: "https://nearbyyou.s3.us-east-2.amazonaws.com"
 });
 
 module.exports = {
     uploadImage: async (req, fileName) => {
         var params = {
-            Bucket: "homesweb", 
-            Key: "imagelibrary/1476247075168_Continental_Breakfast.jpg"
+            Bucket: "nearbyyou", 
+            Key: "Desert.jpg"
         };
         s3.getObject(params, function(err, data) {
             if (err) {
@@ -20,16 +20,20 @@ module.exports = {
             } else {   
                 console.log(data.Body); 
 
+                console.log("Date.now :- ", Date.now());
+                var key = Date.now()+"_Test_Continental_Breakfast.jpg";
                 var params2 = {
                     Body: data.Body, 
-                    Bucket: "homesweb", 
-                    Key: "imagelibrary/Test_Continental_Breakfast.jpg",
+                    Bucket: "nearbyyou", 
+                    Key: key,
                     ACL: "public-read-write",
                     BucketKeyEnabled: true
                    };
                    s3.putObject(params2, function(err, data) {
                      if (err) console.log(err, err.stack); // an error occurred
-                     else     console.log(data);           // successful response
+                     else{
+                        console.log("https://nearbyyou.s3.us-east-2.amazonaws.com/"+key); 
+                     }           // successful response
                      
                    });
                 // let response = s3.upload({

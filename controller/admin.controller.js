@@ -6,7 +6,17 @@ const ShopBranch = require('../Schema/ShopBranch');
 exports.category = async (req, res, next) => {
     try {
 
-        let data = await Category.find({});
+        console.log("Req.body category :- ", req.body)
+        const { search } = req.body;
+
+        let data = ''
+        if (search) {
+            data = await Category.find({ name: search });
+        } else {
+            data = await Category.find({});
+        }
+
+
 
         console.log("data: - ", data);
 
@@ -202,8 +212,13 @@ exports.changeCategoryStatus = async (req, res, next) => {
 //Plan Listing API
 exports.plan = async (req, res, next) => {
     try {
-
-        let data = await Plan.find({});
+        const { search } = req.body
+        let data = ''
+        if (search) {
+            data = await Plan.find({ name: search });
+        } else {
+            data = await Plan.find({});
+        }
 
         if (data) {
             res.send({
@@ -218,14 +233,15 @@ exports.plan = async (req, res, next) => {
         } else {
             res.send({
                 status: 'failure',
-                msg: 'Something is Wrong, Plese Try Again !! category',
+                msg: 'Something is Wrong, Plese Try Again !!',
                 payload: {
-                    error: 'Category Search Fail'
+                    error: 'Plan Search Fail'
                 }
             })
         }
     }
     catch (error) {
+        console.log("errors :- ", error);
         res.send({
             status: 'failure',
             msg: 'Server Error Category Data ',
@@ -399,7 +415,15 @@ exports.changePlanStatus = async (req, res, next) => {
 exports.vendorList = async (req, res, next) => {
     try {
 
-        const { type } = req.body;
+        const { type, search } = req.body;
+
+        let query = []
+        if (search) {
+            query.push({ shop_name: search });
+        }
+        if (type) {
+            query.push({ shop_status: type });
+        }
 
         console.log("Tyep :- ", req.body);
 
@@ -409,7 +433,7 @@ exports.vendorList = async (req, res, next) => {
             [
                 {
                     '$match': {
-                        'shop_status': type
+                        $and: query
                     }
                 }, {
                     '$lookup': {
