@@ -128,8 +128,8 @@ exports.getAllTickets = async (req, res) => {
 	const vendor_details = await Vendor.find({ user_id: req.user_id });
 	const vendor_id = vendor_details[0]._id;
 	const { status, shop_pincode } = req.query;
-	// console.log("status and pincode is ->", status,shop_pincode);
-	// console.log("vendor id is -->", vendor_id);
+	console.log("status and pincode is ->", status,shop_pincode);
+	console.log("vendor id is -->", vendor_id);
 	try {
 		const shop_details = await vendorshop.aggregate([
 			{
@@ -253,25 +253,4 @@ exports.updateTicketStatus = async (req, res, next) => {
 
 
 
-
-
-//aggregation to find all deatils of customer
-
-// [
-//   {
-//     '$lookup': {
-//       'from': 'tickets', 
-//       'localField': '_id', 
-//       'foreignField': 'ticket_owner', 
-//       'as': 'customerticketdeatails'
-//     }
-//   }, {
-//     '$lookup': {
-//       'from': 'users', 
-//       'localField': 'user_id', 
-//       'foreignField': '_id', 
-//       'as': 'userdetails'
-//     }
-//   }
-// ]
 
