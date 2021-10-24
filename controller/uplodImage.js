@@ -1,12 +1,10 @@
 const AWS = require('aws-sdk');
 
-
-
 module.exports = {
     uploadImage: async (req, fileName) => {
         var params = {
-            Bucket: "homesweb", 
-            Key: "imagelibrary/1476247075168_Continental_Breakfast.jpg"
+            Bucket: "nearbyyou", 
+            Key: "Desert.jpg"
         };
         s3.getObject(params, function(err, data) {
             if (err) {
@@ -14,16 +12,20 @@ module.exports = {
             } else {   
                 console.log(data.Body); 
 
+                console.log("Date.now :- ", Date.now());
+                var key = Date.now()+"_Test_Continental_Breakfast.jpg";
                 var params2 = {
                     Body: data.Body, 
-                    Bucket: "homesweb", 
-                    Key: "imagelibrary/Test_Continental_Breakfast.jpg",
+                    Bucket: "nearbyyou", 
+                    Key: key,
                     ACL: "public-read-write",
                     BucketKeyEnabled: true
                    };
                    s3.putObject(params2, function(err, data) {
                      if (err) console.log(err, err.stack); // an error occurred
-                     else     console.log(data);           // successful response
+                     else{
+                        console.log("https://nearbyyou.s3.us-east-2.amazonaws.com/"+key); 
+                     }           // successful response
                      
                    });
                 // let response = s3.upload({

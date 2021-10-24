@@ -118,6 +118,10 @@ exports.search = async (req, res, next) => {
         if (category) {
             query.push({ shop_category: category })
         }
+        if (freeText) {
+            query.push({ shop_name: freeText })
+        }
+        console.log("quesry :- ", query);
         let data = await ShopBranch.find({ $and: query });
 
         console.log("data :- ", data);
@@ -487,9 +491,25 @@ exports.userDetails = async (req, res, next) => {
     console.log("req.bosy :- ", req.body);
 
     try {
-        let data = await User.find({ _id: req.body.userID });
+        // let data = await User.find({ _id: req.body.userID });
 
-        console.log("User Data :- ", data)
+        let data = await User.aggregate(
+            [
+                {
+                    '$match': {
+                        '_id': ObjectId(req.body.userID)
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'customers',
+                        'localField': '_id',
+                        'foreignField': 'user_type',
+                        'as': 'Details'
+                    }
+                }
+            ])
+
+        console.log("User Data Customer Profile:- ", data)
 
         if (data) {
             res.send({
