@@ -36,7 +36,7 @@ router.post('/userDetails', auth, customerController.userDetails);
 router.post('/profileEdit', auth, customerController.profileEdit);
 
 //Upload Image
-router.post('/uploadImage', customerController.uploadImage);
+router.post('/uploadImage', auth, customerController.uploadImage);
 
 //Acceot Reject Holding Request
 router.post('/acceptRejectHoldingReq', customerController.acceptRejectShopRequest);

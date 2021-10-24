@@ -35,9 +35,9 @@ var shopBranch = new Schema({
         required: true
     },
     shop_status:{
-        type: 'string',
+        type: String,
         default: "pending",
-        enum:["pending",  "payment_pending", "active","reject"]
+        enum:["pending",  "payment_pending", "active","reject", "inactive"]
     },
     status: {
         type: Boolean,

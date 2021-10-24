@@ -1,13 +1,5 @@
 const AWS = require('aws-sdk');
 
-const s3 = new AWS.S3({
-    accessKeyId: 'AKIA3G5F4IDZZE35AX7G',
-    secretAccessKey: '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',
-    region: 'us-east-2',
-    s3BucketEndpoint: true,
-    endpoint: "https://nearbyyou.s3.us-east-2.amazonaws.com"
-});
-
 module.exports = {
     uploadImage: async (imageData, fileName) => {
 
@@ -62,7 +54,6 @@ module.exports = {
                 //     ContentType: data.ContentType,
                 //     ACL: 'public-read'
                 // }).promise()
-
                 // return response.then(data => {
                 //     console.log("success : " + data);
                 //     return { status: true, data }

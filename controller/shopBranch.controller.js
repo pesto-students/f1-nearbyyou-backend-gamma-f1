@@ -7,7 +7,7 @@ const Category = require('../Schema/Category');
 //create shop 
 exports.createShop = async (req, res, next) => {
 	console.log("add shop api is called")
-	console.log(req.body)
+	console.log(req.user_id)
 	const vendor_details = await Vendor.find({ user_id: req.user_id });
 	console.log("vendor ID -> ", vendor_details[0]._id);
 	const vendor_id = vendor_details[0]._id;

@@ -4,19 +4,19 @@ var Schema = mongoose.Schema;
 var customer = new Schema({
     door_number: {
         type: String,
-        required: true
+        // required: true
     },
     street: {
         type: String,
-        required: true
+        // required: true
     },
     area: {
         type: String,
-        required: true
+        // required: true
     },
     city_town: {
         type: String,
-        required: true
+        // required: true
     },
     state: {
         type: String,
