@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require('../Schema/User');
 
-// const { initializeApp } = require('firebase-admin/app');
 const { getAuth } = require('firebase-admin/auth')
 const admin = require("firebase-admin");
 
@@ -13,9 +12,8 @@ admin.initializeApp({
 
 
 module.exports = async function (req, res, next) {
-    // console.log("hearder==>",req)
-    const header_for_token = req.header('g-auth-token') ? "true" : "false";
-    console.log("header present in ===>", header_for_token)
+    const header_for_token = req.header('g-auth-token') ? true : false;
+    
     let token = "";
     if (header_for_token) {
         token = req.header('g-auth-token');
