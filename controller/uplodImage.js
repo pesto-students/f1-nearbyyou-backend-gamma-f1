@@ -1,12 +1,6 @@
 const AWS = require('aws-sdk');
 
-const s3 = new AWS.S3({
-    accessKeyId: 'AKIATWX57TAJWTIJUIHK',
-    secretAccessKey: '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',
-    region: 'us-east-1',
-    s3BucketEndpoint: true,
-    endpoint: "http://homesweb.s3.amazonaws.com"
-});
+
 
 module.exports = {
     uploadImage: async (req, fileName) => {
