@@ -753,6 +753,54 @@ exports.acceptRejectShopRequest = async (req, res, next) => {
     }
 }
 
+//Add FeedBack and Ticked Close
+exports.sendDeedback = async (req, res, next) => {
+    try {
+
+        console.log("acceptRejectShopRequest: - ", req.body);
+
+        const { shopID, userId, feedBack, rating } = req.body
+
+        console.log("View Feeed Back", shopID, userId, feedBack, rating);
+
+
+        // const newCategory = new Category(categoryData);
+        // const data = newCategory.save();
+
+
+        const data = true;
+        if (data) {
+            res.send({
+                status: 'success',
+                msg: `Ticked Close Successfullt`,
+                payload: {
+                    data: {
+                        code: 'ticked Close'
+                    }
+                }
+            })
+        } else {
+            res.send({
+                status: 'failure',
+                msg: 'Something is Wrong, Plese Try Again !!',
+                payload: {
+                    error: 'Ticket Close Fail'
+                }
+            })
+        }
+    }
+    catch (error) {
+        res.send({
+            status: 'failure',
+            msg: 'Server Error ',
+            payload: {
+                error: 'Server Error'
+            }
+        })
+    }
+}
+
+
 
 // exports.uploadImage = async (req, res, next) => {
 //     try {

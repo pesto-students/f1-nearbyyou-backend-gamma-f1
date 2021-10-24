@@ -41,5 +41,7 @@ router.post('/uploadImage', auth, customerController.uploadImage);
 //Acceot Reject Holding Request
 router.post('/acceptRejectHoldingReq', customerController.acceptRejectShopRequest);
 
+//Submit FeedBack and Ticket Close
+router.post('/sendDeedback', customerController.sendDeedback);
 
 module.exports = router;
