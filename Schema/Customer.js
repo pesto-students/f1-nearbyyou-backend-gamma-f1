@@ -20,11 +20,11 @@ var customer = new Schema({
     },
     state: {
         type: String,
-        required: true
+        // required: true
     },
     pincode: {
         type: Number,
-        required: true
+        // required: true
     },
     status: {
         type: Boolean,

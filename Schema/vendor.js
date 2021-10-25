@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var vendor = new Schema({
     shop_name: {
         type: String,
-        required: true
+        // required: true
     },
     status: {
         type: Boolean,

@@ -6,6 +6,7 @@ const connectDB = require('./config/db');
 connectDB();
 
 const task = require('./middleware/cornJob/ticketCorn')
+const Plan = require('./Schema/Plan');
  
 
 
@@ -63,7 +64,7 @@ app.use('/api/customer', require('./Router/customer.routes'));
 app.use('/api/admin', require('./Router/admin.routes'));
 app.use("/api/vendor", require('./Router/vendor.routes'));
 app.use("/api/ticket", require('./Router/ticket.router'));
-
+app.use("/api/razorpay",require('./Router/vendor.routes'))
 
 app.post('/verification', (req, res) => {
 	// do a validation
@@ -90,10 +91,11 @@ app.post('/verification', (req, res) => {
 	}
 	res.json({ status: 'ok' })
 })
-
-app.post('/api/razorpay', async (req, res) => {
+// app.use('/api/razorpay',)
+app.get('/api/razorpay', async (req, res) => {
+    const plan = await Plan.findById(req.query.plan_id);
     const payment_capture = 1
-    const amount = 500
+    const amount = plan.plan_price;
     const currency = 'INR'
 
     const options = {
