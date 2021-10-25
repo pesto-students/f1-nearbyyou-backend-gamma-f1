@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 const router = express.Router();
 const auth = require('../middleware/auth');
 const customerController = require('../controller/customer.controller');
@@ -36,7 +37,8 @@ router.post('/userDetails', auth, customerController.userDetails);
 router.post('/profileEdit', auth, customerController.profileEdit);
 
 //Upload Image
-router.post('/uploadImage', auth, customerController.uploadImage);
+// router.post('/uploadImage', auth, customerController.uploadImage);
+router.post('/uploadImage', multer().any(), customerController.uploadImage);
 
 //Acceot Reject Holding Request
 router.post('/acceptRejectHoldingReq', customerController.acceptRejectShopRequest);
