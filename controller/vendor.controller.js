@@ -39,8 +39,6 @@ exports.signup = async (req, res, next) => {
                             }
                         });
                     })
-
-                console.log("user is created")
             })
             .catch(error => {
                 res.json({

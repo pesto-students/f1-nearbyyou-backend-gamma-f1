@@ -4,6 +4,7 @@ const vendorController = require('../controller/vendor.controller');
 const { vendor_create, validatevendor } = require('../middleware/vendorValidation');
 const shopBrnachController = require('../controller/shopBranch.controller');
 const serviceController = require('../controller/service.controller');
+const plansController = require('../controller/plans.controller');
 const auth = require('../middleware/auth');
 const { add_shop_validate, edit_shop_validate, validateShop } = require('../middleware/shopValidation');
 const { add_shop_service_validate, getservice, validateService } = require('../middleware/serviceValidation');
@@ -29,6 +30,14 @@ router.get('/service/:id', auth, serviceController.getShopAllService);
 // router.get('/service/:id',auth, serviceController.findOneShopService);
 router.put('/service/:id', auth, serviceController.editShopService);
 router.delete('/service/:id', auth, serviceController.deleteShopService);
+
+
+
+
+router.get('/plans',auth,plansController.getAllPlans);
+
+
+
 
 
 

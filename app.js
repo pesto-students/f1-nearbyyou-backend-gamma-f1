@@ -5,12 +5,20 @@ const path = require('path');
 const connectDB = require('./config/db');
 connectDB();
 
-const task = require('./middleware/cornJob/ticketCorn')
+
+const task = require('./middleware/cornJob/ticketCorn');
+const Payment = require('./Schema/Payment');
+const vendorshop = require('./Schema/ShopBranch');
+
+
+
+
 
 // var express = require('express')
 var bodyParser = require('body-parser');
 
 var app = express()
+
 
 // Body-parser middleware
 app.use(bodyParser.urlencoded({extended:false}))
@@ -20,12 +28,13 @@ app.use(bodyParser.json())
 
 // for parsing application/x-www-form-urlencoded
 // app.use(express.urlencoded({ extended: true })); 
+
 app.use(cors());
 // app.use(express.urlencoded({ limit: '1000mb', extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //for payment
-const shortid = require('shortid')
+
 const Razorpay = require('razorpay')
 // const bodyParser = require('body-parser')
 // app.use(bodyParser.json())
@@ -65,13 +74,11 @@ app.use('/api/customer', require('./Router/customer.routes'));
 app.use('/api/admin', require('./Router/admin.routes'));
 app.use("/api/vendor", require('./Router/vendor.routes'));
 app.use("/api/ticket", require('./Router/ticket.router'));
+app.use('/api/razorpay', require('./Router/payment.routes'));
 
-
-app.post('/verification', (req, res) => {
+app.post('/verification', async (req, res) => {
 	// do a validation
 	const secret = 'NearByYou'
-
-	console.log(req.body)
 
 	const crypto = require('crypto')
 
@@ -82,10 +89,41 @@ app.post('/verification', (req, res) => {
 	console.log(digest, req.headers['x-razorpay-signature'])
 
 	if (digest === req.headers['x-razorpay-signature']) {
-		console.log('request is legit');
-        console.log("SuccessResponse :- ", req.body);
-        console.log("JSON.stringify(req.body, null, 4) :- ", JSON.stringify(req.body, null, 4));
-		// process it
+		const payment_status = "successful";
+		const payment_date = new Date();
+		const shop_id = req.body.payload.payment.entity.notes.shop_id;
+		const payment_plan = req.body.payload.payment.entity.notes.plan_id;
+		const payment = new Payment({ payment_status: payment_status, payment_date: payment_date, shop_id: shop_id, payment_plan: payment_plan });
+
+		await payment.save()
+			.then(payment_details= async () => {
+				const details = payment_details;
+				console.log("payment done and details are ===>", payment_details);
+				await vendorshop.findByIdAndUpdate(shop_id, { $set: { shop_status: "active" } }, { new: true })
+					.then(data => {
+						res.json({
+							status: "success",
+							message: "Payment done and updated status",
+							payload: {
+								data: { data, details }
+							}
+						});
+					})
+					.catch(error => {
+						res.json({
+							status: "failure",
+							message: "server error",
+							payload: {
+								error: error.message
+							}
+						});
+					})
+
+
+			})
+			.catch(err => {
+				console.log(err)
+			})
 		require('fs').writeFileSync('payment1.json', JSON.stringify(req.body, null, 4))
 	} else {
 		// pass it
@@ -93,30 +131,6 @@ app.post('/verification', (req, res) => {
 	res.json({ status: 'ok' })
 })
 
-app.post('/api/razorpay', async (req, res) => {
-    const payment_capture = 1
-    const amount = 500
-    const currency = 'INR'
-
-    const options = {
-        amount: amount * 100,
-        currency,
-        receipt: shortid.generate(),
-        payment_capture
-    }
-
-    try {
-        const response = await razorpay.orders.create(options)
-        console.log("Hello :-",response)
-        res.json({
-            id: response.id,
-            currency: response.currency,
-            amount: response.amount
-        })
-    } catch (error) {
-        console.log(error)
-    }
-})
 
 
 
@@ -125,5 +139,5 @@ const PORT = process.env.PORT || 3003;
 
 // Start the server @ port
 app.listen(PORT, () => {
-    console.log(`server started at ${PORT}`);
+	console.log(`server started at ${PORT}`);
 });
