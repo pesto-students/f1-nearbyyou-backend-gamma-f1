@@ -1,8 +1,19 @@
 const AWS = require('aws-sdk');
 
-module.exports = {
+console.log("process.env.accessKeyId ", process.env.AccessKeyId);
+console.log("process.env.secretAccessKey :- ", process.env.SecretAccessKey);
+const s3 = new AWS.S3({
+    accessKeyId: process.env.accessKeyId,
+    secretAccessKey: process.env.secretAccessKey,
+    region: 'us-east-2',
+    s3BucketEndpoint: true,
+    endpoint: "https://nearbyyou.s3.us-east-2.amazonaws.com"
+});
+
+module.exports = { 
     uploadImage: async (imageData, fileName) => {
 
+        console.log("DATA inupload");
         var params2 = {
             Body: imageData,
             Bucket: "nearbyyou",
@@ -10,14 +21,17 @@ module.exports = {
             ACL: "public-read-write",
             BucketKeyEnabled: true
         };
-        s3.putObject(params2, function (err, data) {
-            if (err) console.log(err, err.stack); // an error occurred
-            else {
+        let response =await  s3.putObject(params2, function (err, data) {
+            if (err) {
+                console.log(err, err.stack);
+                return { status: false }
+            } else {
                 console.log("https://nearbyyou.s3.us-east-2.amazonaws.com/" + fileName);
+                return { status: true, URL: `https://nearbyyou.s3.us-east-2.amazonaws.com/ + ${fileName}` }
             }           // successful response
-
         });
 
+        return response;
 
 
 
@@ -47,22 +61,22 @@ module.exports = {
         //             }           // successful response
 
         //         });
-                // let response = s3.upload({
-                //     Bucket: 'homesweb',
-                //     Key: "imagelibrary/Test_Continental_Breakfast.jpg",
-                //     Body: data.Body,
-                //     ContentType: data.ContentType,
-                //     ACL: 'public-read'
-                // }).promise()
-                // return response.then(data => {
-                //     console.log("success : " + data);
-                //     return { status: true, data }
-                // }).catch(err => {
-                //     console.log("error : " + err);
-                //     return { status: false, err }
-                // })
-            // }
-            // successful response
+        // let response = s3.upload({
+        //     Bucket: 'homesweb',
+        //     Key: "imagelibrary/Test_Continental_Breakfast.jpg",
+        //     Body: data.Body,
+        //     ContentType: data.ContentType,
+        //     ACL: 'public-read'
+        // }).promise()
+        // return response.then(data => {
+        //     console.log("success : " + data);
+        //     return { status: true, data }
+        // }).catch(err => {
+        //     console.log("error : " + err);
+        //     return { status: false, err }
+        // })
+        // }
+        // successful response
         // });
         // console.log("Upload image function call ");
         // let response = s3.upload({

@@ -9,7 +9,7 @@ var bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
-
+const crypto = require('crypto')
 const utils = require('./uplodImage')
 
 async function hashPassword(password) {
@@ -346,8 +346,10 @@ exports.ticket = async (req, res, next) => {
 
         const { description, date, time, customerId, ticket_status, shop_ticket } = req.body;
 
+        console.log("crypto.randomBytes(16).toString(); :-", crypto.randomBytes(16).toString("hex"));
+
         const ticket = {
-            ticket_number: customerId,
+            ticket_number: crypto.randomBytes(16).toString("hex"),
             service_description: description,
             service_date: date,
             service_time: time,
@@ -664,11 +666,11 @@ exports.uploadImage = async (req, res, next) => {
     console.log("req.bosy :- ", req.body);
     try {
 
-        console.log("req.formdata:- ", req.file);
+        console.log("req.formdata:- ", req.files);
 
         const { image, fileName } = req.body;
 
-        let imageData = image;
+        let imageData = req.files[0].buffer;
 
         console.log("imageData", req.body);
 
@@ -676,32 +678,42 @@ exports.uploadImage = async (req, res, next) => {
         // console.log("buffer: - ", buffer);
 
         // const fs = require("fs");
-// Reads file in form buffer => <Buffer ff d8 ff db 00 43 00 ...
-// const buffer = fs.readFileSync("path-to-image.jpg");
-// Pipes an image with "new-path.jpg" as the name.
-// fs.writeFileSync("new-path.jpg", buffer);
+        // Reads file in form buffer => <Buffer ff d8 ff db 00 43 00 ...
+        // const buffer = fs.readFileSync("path-to-image.jpg");
+        // Pipes an image with "new-path.jpg" as the name.
+        // fs.writeFileSync("new-path.jpg", buffer);
         // let filename = Date.now()+"_"+fileName;
 
-        // let response = await utils.uploadImage(buffer, filename);
+        let response = await utils.uploadImage(imageData, req.body.fileName);
 
-        // if (response.status) {
-        //     conosle.log("Success :- ", response);
-        // } else {
-        //     console.log("Error :- ", response);
-        // }
+        // console.log("response :- ", response);
 
-
-        res.send({
-            status: 'success',
-            msg: 'Profile Update Successfully!!',
-            payload: {
-                data: {
-                    data: 'Profile Edit Success',
+        if (response.status) {
+            // conosle.log("Success :- ", response);
+            res.send({
+                status: 'success',
+                msg: 'Profile Update Successfully!!',
+                payload: {
+                    data: {
+                        data: 'Profile Edit Success',
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            // console.log("Error :- ", response);
+            res.send({
+                status: 'failure',
+                msg: 'Profile Update Fail!!',
+                payload: {
+                    data: {
+                        data: 'Profile Upload Error',
+                    }
+                }
+            })
+        }
     }
     catch (error) {
+        console.log("Erro := ", error);
         res.send({
             status: 'failure',
             msg: 'Server Error',
@@ -752,6 +764,54 @@ exports.acceptRejectShopRequest = async (req, res, next) => {
         })
     }
 }
+
+//Add FeedBack and Ticked Close
+exports.sendDeedback = async (req, res, next) => {
+    try {
+
+        console.log("acceptRejectShopRequest: - ", req.body);
+
+        const { shopID, userId, feedBack, rating } = req.body
+
+        console.log("View Feeed Back", shopID, userId, feedBack, rating);
+
+
+        // const newCategory = new Category(categoryData);
+        // const data = newCategory.save();
+
+
+        const data = true;
+        if (data) {
+            res.send({
+                status: 'success',
+                msg: `Ticked Close Successfullt`,
+                payload: {
+                    data: {
+                        code: 'ticked Close'
+                    }
+                }
+            })
+        } else {
+            res.send({
+                status: 'failure',
+                msg: 'Something is Wrong, Plese Try Again !!',
+                payload: {
+                    error: 'Ticket Close Fail'
+                }
+            })
+        }
+    }
+    catch (error) {
+        res.send({
+            status: 'failure',
+            msg: 'Server Error ',
+            payload: {
+                error: 'Server Error'
+            }
+        })
+    }
+}
+
 
 
 // exports.uploadImage = async (req, res, next) => {

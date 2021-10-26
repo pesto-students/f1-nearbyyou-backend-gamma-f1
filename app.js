@@ -5,9 +5,11 @@ const path = require('path');
 const connectDB = require('./config/db');
 connectDB();
 
+
 const task = require('./middleware/cornJob/ticketCorn');
 const Payment = require('./Schema/Payment');
 const vendorshop = require('./Schema/ShopBranch');
+
 
 
 
@@ -17,10 +19,16 @@ var bodyParser = require('body-parser');
 
 var app = express()
 
-app.use(express.json());
+
+// Body-parser middleware
+app.use(bodyParser.urlencoded({extended:false}))
+app.use(bodyParser.json())
+
+// app.use(express.json()); 
 
 // for parsing application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true })); 
+
 app.use(cors());
 // app.use(express.urlencoded({ limit: '1000mb', extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
