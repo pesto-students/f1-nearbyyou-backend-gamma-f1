@@ -2,7 +2,7 @@ const AWS = require('aws-sdk');
 
 console.log("process.env.accessKeyId ", process.env.AccessKeyId);
 console.log("process.env.secretAccessKey :- ", process.env.SecretAccessKey);
-const s3 = new AWS.S3({
+const s3 = new AWS.S3({    
     accessKeyId: process.env.accessKeyId,
     secretAccessKey: process.env.secretAccessKey,
     region: 'us-east-2',
@@ -10,7 +10,7 @@ const s3 = new AWS.S3({
     endpoint: "https://nearbyyou.s3.us-east-2.amazonaws.com"
 });
 
-module.exports = { 
+module.exports = {
     uploadImage: async (imageData, fileName) => {
 
         console.log("DATA inupload");
@@ -21,17 +21,19 @@ module.exports = {
             ACL: "public-read-write",
             BucketKeyEnabled: true
         };
-        let response =await  s3.putObject(params2, function (err, data) {
+        let resImg = await s3.putObject(params2, function (err, data) {
             if (err) {
                 console.log(err, err.stack);
-                return { status: false }
+                return ({ status: false })
             } else {
                 console.log("https://nearbyyou.s3.us-east-2.amazonaws.com/" + fileName);
-                return { status: true, URL: `https://nearbyyou.s3.us-east-2.amazonaws.com/ + ${fileName}` }
+                return ({ status: true, URL: `https://nearbyyou.s3.us-east-2.amazonaws.com/ + ${fileName}` });
             }           // successful response
         });
 
-        return response;
+        console.log("resImg- ", resImg);
+
+        return resImg;
 
 
 

@@ -4,6 +4,7 @@ const ShopBranch = require('../Schema/ShopBranch');
 const Ticket = require('../Schema/Ticket')
 const Customer = require('../Schema/Customer');
 const Vendor = require('../Schema/Vendor');
+const FeedBack = require('../Schema/FeedBack');
 const bcrypt = require('bcrypt');
 var bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken')
@@ -305,7 +306,30 @@ exports.detail = async (req, res, next) => {
     try {
         const { shopId } = req.body;
 
-        let data = await ShopBranch.find({ _id: shopId });
+        // let data = await ShopBranch.find({ _id: shopId });
+
+        const data = await ShopBranch.aggregate(
+            [
+                {
+                    '$match': {
+                        '_id': new ObjectId(shopId)
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'feedbacks',
+                        'localField': '_id',
+                        'foreignField': 'shopId',
+                        'as': 'feedBacks'
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'users',
+                        'localField': 'feedBacks.userID',
+                        'foreignField': '_id',
+                        'as': 'userInfo'
+                    }
+                }
+            ])
 
         console.log("Details data :- ", data);
         if (data) {
@@ -686,9 +710,9 @@ exports.uploadImage = async (req, res, next) => {
 
         let response = await utils.uploadImage(imageData, req.body.fileName);
 
-        // console.log("response :- ", response);
+        console.log("response View :- ", response);
 
-        if (response.status) {
+        if (response?.status) {
             // conosle.log("Success :- ", response);
             res.send({
                 status: 'success',
@@ -775,12 +799,16 @@ exports.sendDeedback = async (req, res, next) => {
 
         console.log("View Feeed Back", shopID, userId, feedBack, rating);
 
+        let feedBackData = {
+            shopId: shopID,
+            userID: userId,
+            feedBack: feedBack,
+            rating: rating
+        }
 
-        // const newCategory = new Category(categoryData);
-        // const data = newCategory.save();
+        const newFeedBack = new FeedBack(feedBackData);
+        const data = newFeedBack.save();
 
-
-        const data = true;
         if (data) {
             res.send({
                 status: 'success',
@@ -802,6 +830,7 @@ exports.sendDeedback = async (req, res, next) => {
         }
     }
     catch (error) {
+        console.log("error- ", error);
         res.send({
             status: 'failure',
             msg: 'Server Error ',
