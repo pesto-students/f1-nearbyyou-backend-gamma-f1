@@ -124,19 +124,16 @@ exports.getTicket = async (req, res) => {
 
 
 exports.getAllTickets = async (req, res) => {
-	console.log("user id in tickets is -->", req.user_id);
 	const vendor_details = await Vendor.find({ user_id: req.user_id });
 	const vendor_id = vendor_details[0]._id;
-	const { status, shop_pincode } = req.query;
-	console.log("status and pincode is ->", status,shop_pincode);
-	console.log("vendor id is -->", vendor_id);
+	const { status, shop_id } = req.query;
 	try {
 		const shop_details = await vendorshop.aggregate([
 			{
 				'$match': {
 					'$and': [
 						{
-							'shop_pincode': parseInt(shop_pincode)
+							'_id': shop_id
 						},
 						{
 							'shop_owner': vendor_id
@@ -150,22 +147,14 @@ exports.getAllTickets = async (req, res) => {
 				'$match': {
 					'$and': [
 						{
-							'shop_ticket': shop_details[0]._id
+							'shop_ticket': ObjectId(shop_id)
 						},
 						{
 							'ticket_status': status
 						}
 					]
 				}
-			},
-			// {
-			// 	'$lookup': {
-			// 		'from': 'customers',
-			// 		'localField': 'ticket_owner',
-			// 		'foreignField': '_id',
-			// 		'as': 'customerdeatils',
-			// 	},
-			// }
+			}
 		])
 		if (!ticketdetails) {
 			res.json({

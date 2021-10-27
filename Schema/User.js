@@ -18,7 +18,7 @@ var user = new Schema({
     },
     contact_number: {
         type: String,
-        required: true
+        // required: true
     },
     status: {
         type: Boolean,
