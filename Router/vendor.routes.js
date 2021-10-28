@@ -8,7 +8,7 @@ const plansController = require('../controller/plans.controller');
 const auth = require('../middleware/auth');
 const { add_shop_validate, edit_shop_validate, validateShop } = require('../middleware/shopValidation');
 const { add_shop_service_validate, getservice, validateService } = require('../middleware/serviceValidation');
-
+const multer = require('multer');
 
 
 
@@ -21,7 +21,8 @@ router.get('/shop/:id', auth, shopBrnachController.findOneShop);
 router.get('/shop', auth, shopBrnachController.findAll);
 router.put('/shop/:id', auth, edit_shop_validate(), validateShop, shopBrnachController.editShop);
 router.delete('/shop/:id', auth, shopBrnachController.deleteShop);
-
+//Upload Image
+router.post('/shop/uploadImage', multer().any(), shopBrnachController.uploadImage);
 
 
 //shop service api
@@ -35,7 +36,6 @@ router.delete('/service/:id', auth, serviceController.deleteShopService);
 
 
 router.get('/plans',auth,plansController.getAllPlans);
-
 
 
 

@@ -21,6 +21,7 @@ module.exports = {
             ACL: "public-read-write",
             BucketKeyEnabled: true
         };
+
         let resImg = await s3.putObject(params2, function (err, data) {
             if (err) {
                 console.log(err, err.stack);
@@ -29,7 +30,8 @@ module.exports = {
                 console.log("https://nearbyyou.s3.us-east-2.amazonaws.com/" + fileName);
                 return ({ status: true, URL: `https://nearbyyou.s3.us-east-2.amazonaws.com/ + ${fileName}` });
             }           // successful response
-        });
+        })
+        return_data = { ...return_data, response }
 
         console.log("resImg- ", resImg);
 

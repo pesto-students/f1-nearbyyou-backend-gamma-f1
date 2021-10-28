@@ -7,8 +7,11 @@ connectDB();
 
 
 const task = require('./middleware/cornJob/ticketCorn');
+const payment_validate = require('./middleware/cornJob/paymentCron')
 const Payment = require('./Schema/Payment');
 const vendorshop = require('./Schema/ShopBranch');
+
+
 
 
 
