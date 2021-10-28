@@ -16,16 +16,12 @@ var vendor = new Schema({
         ref: 'User',
         required: true
     },
-    // shop_branches: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: "ShopBranch",
-    // }],
-    // vendor_category: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Category',
-    //     required: true
-    // }],
-},{
+    vendor_category: {
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
+        required: true
+    },
+}, {
     timestamps: true
 });
 

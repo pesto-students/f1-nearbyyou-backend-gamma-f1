@@ -5,7 +5,6 @@ exports.getAllPlans = async (req, res) => {
 	try {
 		await Plan.find({ })
 			.then(data => {
-				console.log(data)
 				res.json({
 					status: "success",
 					message: "found all plans",

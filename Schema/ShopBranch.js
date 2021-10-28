@@ -34,19 +34,26 @@ var shopBranch = new Schema({
         type: Number,
         required: true
     },
-    shop_status:{
+    shop_status: {
         type: String,
         default: "pending",
-        enum:["pending",  "payment_pending", "active","reject", "inactive"]
+        enum: ["pending", "payment_pending", "active", "reject", "inactive"]
     },
     status: {
         type: Boolean,
         default: true,
         required: true
     },
-    shop_owner:{
+    shop_description: {
+        type: String,
+        required: true
+    },
+    shop_timings: {
+        type: String,
+    },
+    shop_owner: {
         type: Schema.Types.ObjectId,
-        ref:'Vendor',
+        ref: 'Vendor',
         required: true
     },
     // shop_tickets:[{
@@ -62,12 +69,12 @@ var shopBranch = new Schema({
     //     ref:"Payment",
     //     required: true
     // }],
-    shop_category:{
-        type:Schema.Types.ObjectId,
-        ref:"Category",
+    shop_category: {
+        type: Schema.Types.ObjectId,
+        ref: "Category",
         required: true
     },
-},{
+}, {
     timestamps: true
 });
 

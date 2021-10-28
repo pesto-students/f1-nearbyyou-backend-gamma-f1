@@ -7,17 +7,9 @@ const utils = require('./uplodImage')
 
 //create shop 
 exports.createShop = async (req, res, next) => {
-	console.log("add shop api is called")
-	console.log(req.user_id)
-	const vendor_details = await Vendor.find({ user_id: req.user_id });
-	console.log("vendor ID -> ", vendor_details[0]._id);
-	const vendor_id = vendor_details[0]._id;
-	const category_selected = await Category.find({ name: req.body.shop_category_name });
-	console.log("category selected-->", category_selected)
-	const category_id = category_selected[0]._id;
-
+	console.log(req.body)
 	try {
-		const newShopDetails = { ...req.body, shop_owner: vendor_id, shop_category: category_id }
+		const newShopDetails = { ...req.body }
 		const newShop = new vendorshop(newShopDetails);
 		await newShop.save()
 			.then(
@@ -56,9 +48,6 @@ exports.createShop = async (req, res, next) => {
 
 //edit shop details
 exports.editShop = async (req, res, next) => {
-	// const vendor_details = await Vendor.find({ user_id: req.user_id });
-	// console.log("vendor ID -> ", vendor_details[0]._id);
-	// const vendor_id = vendor_details[0]._id;
 	try {
 		let shopbrnachdetails = await vendorshop.findById(req.params.id);
 		if (!shopbrnachdetails) {
