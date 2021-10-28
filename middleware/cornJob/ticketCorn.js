@@ -2,22 +2,7 @@ var cron = require('node-cron');
 const Ticket = require('../../Schema/Ticket');
 const ShopBrnach = require('../../Schema/ShopBranch');
 
-const new_ticket_cron = cron.schedule("0 */6 * * *", async function () {
-    console.log("cron job started")
-    // const tickets = await Ticket.aggregate([
-    //     {
-    //         $match: {
-    //             $and: [{
-    //                 ticket_status: "new"
-
-    //             }, {
-    //                 createdAt: {
-    //                     $lt: new Date(Date.now() - 24 * 60 * 60 * 1000)
-    //                 }
-    //             }]
-    //         }
-    //     }
-    // ])
+const new_ticket_cron = cron.schedule("0/10 * * * * *", async function () {
     const query = {
         $match: {
             $and: [{
@@ -30,8 +15,6 @@ const new_ticket_cron = cron.schedule("0 */6 * * *", async function () {
             }]
         }
     }
-    // console.log(tickets)
-    // console.log(tickets.length)
     await Ticket.updateMany(query, {$set: {ticket_status: "closed"}})
 }, {
     scheduled: false
@@ -39,7 +22,7 @@ const new_ticket_cron = cron.schedule("0 */6 * * *", async function () {
 // new_ticket_cron.start();
 
 
-const holding_ticket_cron = cron.schedule("0 */6 * * *", async function () {
+const holding_ticket_cron = cron.schedule("0/10 * * * * *", async function () {
     console.log("cron job started")
     const query = {
         $match: {
@@ -62,7 +45,7 @@ const holding_ticket_cron = cron.schedule("0 */6 * * *", async function () {
 
 
 
-const new_shop_cron = cron.schedule("0 */6 * * *", async function () {
+const new_shop_cron = cron.schedule("0/10 * * * * *", async function () {
     console.log(" new_shop_cron started")
     const query = {
         $match: {
@@ -84,4 +67,4 @@ const new_shop_cron = cron.schedule("0 */6 * * *", async function () {
 
 
 
-
+//0 */6 * * *

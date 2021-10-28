@@ -50,12 +50,57 @@ exports.signup = async (req, res, next) => {
                 });
             })
     } catch (error) {
-        console.log(error)
         res.json({
             status: "failure",
             message: "server error",
             payload: {
                 error: "server error"
+            }
+        });
+    }
+}
+
+
+
+exports.editProfile = async (req, res) => {
+    console.log("edit profile is called", req.params)
+    const { shop_name, email, contact_number } = req.body;
+    console.log("baoyd in editinf LEOQBEV=>",req.body)
+    try {
+        console.log("going inside try ")
+        let vendor = await Vendor.findById(req.params.id);
+        if (!vendor) {
+            console.log("ereeljvduv")
+            res.json({
+                status: "failure",
+                message: "Deatils not found",
+                payload: {
+                    error: "Deatils not found"
+                }
+            });
+        }
+        const user_details = await User.findById(vendor.user_id)
+        console.log("vendor ddeatils==>",vendor)
+        console.log("user details ===>",user_details)
+        const vendor_update= await Vendor.findByIdAndUpdate(req.params.id, { $set: {shop_name: shop_name} }, { new: true });
+            // console.log("shop name edited")
+        const user_update = await User.findByIdAndUpdate(vendor.user_id, { $set: { email: email, contact_number: contact_number } }, { new: true });
+        console.log("eiufbwefgQGIRGB;qig=========>", vendor_update,user_update)
+        res.json({
+            status: "success",
+            message: "successfully updated the profile",
+            payload: {
+                data: "successfully updated the profile"
+            }
+        });
+
+
+    } catch (error) {
+        res.json({
+            status: "failure",
+            message: "server error",
+            payload: {
+                error: error
             }
         });
     }

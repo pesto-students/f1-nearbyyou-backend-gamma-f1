@@ -5,6 +5,7 @@ const { vendor_create, validatevendor } = require('../middleware/vendorValidatio
 const shopBrnachController = require('../controller/shopBranch.controller');
 const serviceController = require('../controller/service.controller');
 const plansController = require('../controller/plans.controller');
+const categoryController = require('../controller/category.controller');
 const auth = require('../middleware/auth');
 const { add_shop_validate, edit_shop_validate, validateShop } = require('../middleware/shopValidation');
 const { add_shop_service_validate, getservice, validateService } = require('../middleware/serviceValidation');
@@ -14,6 +15,7 @@ const multer = require('multer');
 
 //vendor sign up api route
 router.post('/signup', vendor_create(), validatevendor, vendorController.signup);
+router.put('/:id',auth,vendorController.editProfile)
 
 //vendor shop api
 router.post('/createShop', auth, add_shop_validate(), validateShop, shopBrnachController.createShop);
@@ -36,6 +38,7 @@ router.delete('/service/:id', auth, serviceController.deleteShopService);
 
 
 router.get('/plans',auth,plansController.getAllPlans);
+router.get('/categories',categoryController.getAllCategories)
 
 
 
