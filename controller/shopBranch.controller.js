@@ -1,6 +1,7 @@
 const Vendor = require('../Schema/Vendor');
 const vendorshop = require('../Schema/ShopBranch');
 const Category = require('../Schema/Category');
+const utils = require('./uplodImage')
 
 
 
@@ -12,7 +13,7 @@ exports.createShop = async (req, res, next) => {
 	console.log("vendor ID -> ", vendor_details[0]._id);
 	const vendor_id = vendor_details[0]._id;
 	const category_selected = await Category.find({ name: req.body.shop_category_name });
-	console.log("category selected-->",category_selected)
+	console.log("category selected-->", category_selected)
 	const category_id = category_selected[0]._id;
 
 	try {
@@ -207,4 +208,69 @@ exports.findOneShop = async (req, res) => {
 		});
 	}
 }
+
+
+//Upload Image
+exports.uploadImage = async (req, res, next) => {
+	console.log("req.bosy :- ", req.body);
+	try {
+
+		console.log("req.formdata:- ", req.files);
+
+		const { image, fileName } = req.body;
+
+		let imageData = req.files[0].buffer;
+
+		console.log("imageData", req.body);
+
+		// let buffer = new Buffer.from(imageData.split(",")[1],"base64");
+		// console.log("buffer: - ", buffer);
+
+		// const fs = require("fs");
+		// Reads file in form buffer => <Buffer ff d8 ff db 00 43 00 ...
+		// const buffer = fs.readFileSync("path-to-image.jpg");
+		// Pipes an image with "new-path.jpg" as the name.
+		// fs.writeFileSync("new-path.jpg", buffer);
+		// let filename = Date.now()+"_"+fileName;
+
+		let response = await utils.uploadImage(imageData, req.body.fileName);
+
+		console.log("response :- ", response);
+
+		if (response.status) {
+			// conosle.log("Success :- ", response);
+			res.send({
+				status: 'success',
+				msg: 'Profile Update Successfully!!',
+				payload: {
+					data: {
+						data: 'Profile Edit Success',
+					}
+				}
+			})
+		} else {
+			// console.log("Error :- ", response);
+			res.send({
+				status: 'failure',
+				msg: 'Profile Update Fail!!',
+				payload: {
+					data: {
+						data: 'Profile Upload Error',
+					}
+				}
+			})
+		}
+	}
+	catch (error) {
+		console.log("Erro := ", error);
+		res.send({
+			status: 'failure',
+			msg: 'Server Error',
+			payload: {
+				error: 'Server Error'
+			}
+		})
+	}
+}
+
 

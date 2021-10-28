@@ -80,7 +80,7 @@ const new_shop_cron = cron.schedule("0 */6 * * *", async function () {
 }, {
     scheduled: false
 });
-// new_shop_cron.start();
+//  new_shop_cron.start();
 
 
 

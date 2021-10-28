@@ -3,14 +3,14 @@ const AWS = require('aws-sdk');
 console.log("process.env.accessKeyId ", process.env.AccessKeyId);
 console.log("process.env.secretAccessKey :- ", process.env.SecretAccessKey);
 const s3 = new AWS.S3({
-    accessKeyId: process.env.accessKeyId,
-    secretAccessKey: process.env.secretAccessKey,
+    accessKeyId: "AKIA3G5F4IDZZE35AX7G",
+    secretAccessKey: "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",
     region: 'us-east-2',
     s3BucketEndpoint: true,
     endpoint: "https://nearbyyou.s3.us-east-2.amazonaws.com"
 });
 
-module.exports = { 
+module.exports = {
     uploadImage: async (imageData, fileName) => {
 
         console.log("DATA inupload");
@@ -21,17 +21,41 @@ module.exports = {
             ACL: "public-read-write",
             BucketKeyEnabled: true
         };
-        let response =await  s3.putObject(params2, function (err, data) {
+
+        // , function (err, data) {
+        //     if (err) {
+        //         console.log(err, err.stack);
+        //         return { status: false }
+        //     } else {
+        //         console.log("https://nearbyyou.s3.us-east-2.amazonaws.com/" + fileName);
+        //         return { status: true, URL: `https://nearbyyou.s3.us-east-2.amazonaws.com/ + ${fileName}` }
+        //     }           // successful response
+        // }
+        const return_data = {}
+        const response = await s3.putObject(params2, function (err, data) {
             if (err) {
                 console.log(err, err.stack);
-                return { status: false }
+                return_data = { status: false }
             } else {
                 console.log("https://nearbyyou.s3.us-east-2.amazonaws.com/" + fileName);
-                return { status: true, URL: `https://nearbyyou.s3.us-east-2.amazonaws.com/ + ${fileName}` }
+                return_data = { status: true, URL: `https://nearbyyou.s3.us-east-2.amazonaws.com/ + ${fileName}` }
+                // { status: true, URL: `https://nearbyyou.s3.us-east-2.amazonaws.com/ + ${fileName}` }
             }           // successful response
-        });
+        })
+        return_data = { ...return_data, response }
 
-        return response;
+        return return_data;
+        // .then(response=>{
+        //     const return_data = {
+        //         response: response,
+        //         status: true,
+        //         URL: `https://nearbyyou.s3.us-east-2.amazonaws.com/ + ${fileName}` 
+        //     }
+        //     return return_data
+        // })
+        // .catch(err=>{
+        //     return { status: false }
+        // })
 
 
 
