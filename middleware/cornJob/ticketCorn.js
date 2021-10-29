@@ -2,7 +2,7 @@ var cron = require('node-cron');
 const Ticket = require('../../Schema/Ticket');
 const ShopBrnach = require('../../Schema/ShopBranch');
 
-const new_ticket_cron = cron.schedule("0/10 * * * * *", async function () {
+const new_ticket_cron = cron.schedule("0 */6 * * *", async function () {
     const query = {
         $match: {
             $and: [{
@@ -22,7 +22,7 @@ const new_ticket_cron = cron.schedule("0/10 * * * * *", async function () {
 new_ticket_cron.start();
 
 
-const holding_ticket_cron = cron.schedule("0/10 * * * * *", async function () {
+const holding_ticket_cron = cron.schedule("0 */6 * * *", async function () {
     console.log("cron job started")
     const query = {
         $match: {
@@ -45,7 +45,7 @@ holding_ticket_cron.start();
 
 
 
-const new_shop_cron = cron.schedule("0/10 * * * * *", async function () {
+const new_shop_cron = cron.schedule("0 */6 * * *", async function () {
     console.log(" new_shop_cron started")
     const query = {
         $match: {
@@ -66,5 +66,3 @@ const new_shop_cron = cron.schedule("0/10 * * * * *", async function () {
  new_shop_cron.start();
 
 
-
-//0 */6 * * *

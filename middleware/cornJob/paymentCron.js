@@ -22,7 +22,8 @@ findAllPlans = async () => {
 findAllPlans();
 
 
-const shop_status_validate = cron.schedule("0/10 * * * * *", async () => {
+const shop_status_validate = cron.schedule("0 */6 * * *", async () => {
+    console.log("shop_status_validate")
     plan_details.forEach(async (element) => {
 
         const payments = await Payment.aggregate([{
@@ -39,7 +40,6 @@ const shop_status_validate = cron.schedule("0/10 * * * * *", async () => {
                 ]
             }
         }]);
-
         payments.forEach(async (elem) => {
             const shop = await ShopBrnach.findById(elem.shop_id)
             if (shop.shop_status == "active") {
@@ -63,8 +63,8 @@ const msg = {
     html: '<h3>Hi, <br> This is a payment remainder mail.<br> make your shop active by paying and Earn more money by getting more services <br> Thanks</h3>',
 }
 
-const payment_reminder_mail = cron.schedule("0/10 * * * * *", async () => {
-    console.log("payment reminder cron started")
+const payment_reminder_mail = cron.schedule("0 */6 * * *", async () => {
+    console.log("payment reminder cron started",new Date(Date.now() - 24 * 60 * 60 * 1000))
     const query = {
         $match: {
             $and: [{
