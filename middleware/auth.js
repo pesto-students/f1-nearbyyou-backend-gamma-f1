@@ -2,13 +2,13 @@ const jwt = require("jsonwebtoken");
 const User = require('../Schema/User');
 
 const { getAuth } = require('firebase-admin/auth')
-const admin = require("firebase-admin");
+// const admin = require("firebase-admin");
 
-const serviceAccount = require("../googleServiceAccountKey.json");
+// const serviceAccount = require("../googleServiceAccountKey.json");
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
+// admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount)
+// });
 
 
 module.exports = async function (req, res, next) {
