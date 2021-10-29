@@ -32,7 +32,9 @@ app.use(bodyParser.json())
 // for parsing application/x-www-form-urlencoded
 // app.use(express.urlencoded({ extended: true })); 
 
-app.use(cors());
+app.use(cors({
+    origin: '*'
+}));
 // app.use(express.urlencoded({ limit: '1000mb', extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
