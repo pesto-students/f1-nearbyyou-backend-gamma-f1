@@ -115,16 +115,34 @@ exports.search = async (req, res, next) => {
         let query = []
 
         if (pincode) {
-            query.push({ shop_pincode: pincode })
+            query.push({ 'shop_pincode': pincode })
         }
         if (category) {
-            query.push({ shop_category: category })
+            query.push({ 'shop_category': ObjectId(category) })
         }
         if (freeText) {
-            query.push({ shop_name: freeText })
+            query.push({ 'shop_name': freeText })
         }
         console.log("quesry :- ", query);
-        let data = await ShopBranch.find({ $and: query });
+        // let data = await ShopBranch.find({ $and: query });
+
+        const data = await ShopBranch.aggregate(
+            [
+                {
+                    '$match': {
+                        '$and': query
+                        // [{'shop_category': ObjectId(category)}]
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'vendors',
+                        'localField': 'shop_owner',
+                        'foreignField': '_id',
+                        'as': 'vendorDetail'
+                    }
+                }
+            ]
+        )
 
         console.log("data :- ", data);
 
@@ -312,7 +330,7 @@ exports.detail = async (req, res, next) => {
             [
                 {
                     '$match': {
-                        '_id': new ObjectId(shopId)
+                        '_id': ObjectId(shopId)
                     }
                 }, {
                     '$lookup': {
@@ -327,6 +345,20 @@ exports.detail = async (req, res, next) => {
                         'localField': 'feedBacks.userID',
                         'foreignField': '_id',
                         'as': 'userInfo'
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'vendors',
+                        'localField': 'shop_owner',
+                        'foreignField': '_id',
+                        'as': 'vendorDetail'
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'services',
+                        'localField': '_id',
+                        'foreignField': 'service_owner',
+                        'as': 'serviceDetails'
                     }
                 }
             ])
@@ -471,6 +503,14 @@ exports.viewTicket = async (req, res, next) => {
                         'localField': 'shopdeatils.shop_category',
                         'foreignField': '_id',
                         'as': 'categoryDetails'
+                    }
+                },
+                {
+                    '$lookup': {
+                        'from': 'vendors', 
+                        'localField': 'shopdeatils.shop_owner', 
+                        'foreignField': '_id', 
+                        'as': 'vendorDetail'
                     }
                 }
             ]

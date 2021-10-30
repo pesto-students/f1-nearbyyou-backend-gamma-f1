@@ -415,7 +415,7 @@ exports.changePlanStatus = async (req, res, next) => {
 exports.vendorList = async (req, res, next) => {
     try {
 
-        const { type, search } = req.body;
+        const { type, search, todays } = req.body;
 
         let query = []
         if (search) {
@@ -425,7 +425,15 @@ exports.vendorList = async (req, res, next) => {
             query.push({ shop_status: type });
         }
 
-        console.log("Tyep :- ", req.body);
+        if (todays) {
+            query.push({
+                updatedAt: {
+                    $gt: new Date(Date.now() - 24 * 60 * 60 * 1000)
+                }
+            });
+        }
+
+        console.log("Tyep :- ", req.body);        
 
         // let data = await ShopBranch.find({ shop_status: type });
 
@@ -455,6 +463,13 @@ exports.vendorList = async (req, res, next) => {
                         'localField': 'vendorDetails.user_id',
                         'foreignField': '_id',
                         'as': 'userDetails'
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'services',
+                        'localField': '_id',
+                        'foreignField': 'service_owner',
+                        'as': 'serviceDetails'
                     }
                 }
             ]
