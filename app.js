@@ -154,7 +154,7 @@ app.post('/verification', async (req, res) => {
 
 
 
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 80;
 
 
 // Start the server @ port
