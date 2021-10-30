@@ -1,7 +1,7 @@
 const User = require('../Schema/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const Vendor = require('../Schema/Vendor');
+const Vendor = require('../Schema/vendor');
 const Customer = require('../Schema/Customer');
 const { getAuth } = require('firebase-admin/auth')
 const admin = require("firebase-admin");

@@ -1,4 +1,4 @@
-const Vendor = require('../Schema/Vendor');
+const Vendor = require('../Schema/vendor');
 const service = require('../Schema/Service');
 const shopbrnach = require('../Schema/ShopBranch');
 

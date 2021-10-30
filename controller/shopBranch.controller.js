@@ -1,4 +1,4 @@
-const Vendor = require('../Schema/Vendor');
+const Vendor = require('../Schema/vendor');
 const vendorshop = require('../Schema/ShopBranch');
 const Category = require('../Schema/Category');
 const utils = require('./uplodImage')
