@@ -33,7 +33,9 @@ app.use(bodyParser.json())
 // app.use(express.urlencoded({ extended: true })); 
 
 app.use(cors({
-    origin: '*'
+    origin: '*',
+	credentials:true,            //access-control-allow-credentials:true
+	optionSuccessStatus:200,
 }));
 // app.use(express.urlencoded({ limit: '1000mb', extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
