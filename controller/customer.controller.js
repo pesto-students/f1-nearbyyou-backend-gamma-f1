@@ -121,7 +121,7 @@ exports.search = async (req, res, next) => {
             query.push({ 'shop_category': ObjectId(category) })
         }
         if (freeText) {
-            query.push({ 'shop_name': freeText })
+            // query.push({ 'shop_name': freeText })
         }
         console.log("quesry :- ", query);
         // let data = await ShopBranch.find({ $and: query });

@@ -11,7 +11,19 @@ exports.category = async (req, res, next) => {
 
         let data = ''
         if (search) {
-            data = await Category.find({ name: search });
+            console.log("In search API");
+            // data = await Category.find({ name: `/${search}/`});
+            data = await Category.aggregate(
+                [
+                    {
+                        '$match': {
+                            'name': {
+                                '$regex': new RegExp(search)
+                            }
+                        }
+                    }
+                ]
+            )
         } else {
             data = await Category.find({});
         }
@@ -215,7 +227,18 @@ exports.plan = async (req, res, next) => {
         const { search } = req.body
         let data = ''
         if (search) {
-            data = await Plan.find({ name: search });
+            // data = await Plan.find({ name: search });
+            data = await Plan.aggregate(
+                [
+                    {
+                        '$match': {
+                            'name': {
+                                '$regex': new RegExp(search)
+                            }
+                        }
+                    }
+                ]
+            )
         } else {
             data = await Plan.find({});
         }
@@ -433,7 +456,7 @@ exports.vendorList = async (req, res, next) => {
             });
         }
 
-        console.log("Tyep :- ", req.body);        
+        console.log("Tyep :- ", req.body);
 
         // let data = await ShopBranch.find({ shop_status: type });
 
