@@ -1,5 +1,5 @@
 const User = require('../Schema/User');
-const Vendor = require('../Schema/Vendor');
+const Vendor = require('../Schema/vendor');
 const Category = require('../Schema/Category');
 const bcrypt = require('bcrypt');
 

@@ -1,5 +1,5 @@
 const User = require('../Schema/User');
-const Vendor = require('../Schema/Vendor');
+const Vendor = require('../Schema/vendor');
 const Ticket = require('../Schema/Ticket');
 const vendorshop = require('../Schema/ShopBranch');
 const Customer = require('../Schema/Customer');

@@ -1,7 +1,7 @@
 const ShopBrnach = require('../../Schema/ShopBranch');
 const Payment = require('../../Schema/Payment');
 const Plan = require('../../Schema/Plan');
-const Vendor = require('../../Schema/Vendor')
+const Vendor = require('../../Schema/vendor');
 var cron = require('node-cron');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
@@ -51,7 +51,7 @@ const shop_status_validate = cron.schedule("0 */6 * * *", async () => {
     scheduled: false
 });
 
-shop_status_validate.start();
+// shop_status_validate.start();
 
 
 
@@ -105,7 +105,7 @@ const payment_reminder_mail = cron.schedule("0 */6 * * *", async () => {
     });
 })
 
-payment_reminder_mail.start();
+// payment_reminder_mail.start();
 
 
 

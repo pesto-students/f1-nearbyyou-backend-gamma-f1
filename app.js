@@ -23,16 +23,33 @@ var bodyParser = require('body-parser');
 var app = express()
 
 
+app.use(function (req, res, next) {
+	res.header("Access-Control-Allow-Origin", '*');
+	res.header("Access-Control-Allow-Credentials", true);
+	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+	res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+	next();
+});
+
+
+
+
 // Body-parser middleware
-app.use(bodyParser.urlencoded({extended:false}))
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+
+
 
 // app.use(express.json()); 
 
 // for parsing application/x-www-form-urlencoded
 // app.use(express.urlencoded({ extended: true })); 
 
-app.use(cors());
+app.use(cors({
+	origin: '*',
+	credentials: true,            //access-control-allow-credentials:true
+	optionSuccessStatus: 200,
+}));
 // app.use(express.urlencoded({ limit: '1000mb', extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -99,7 +116,7 @@ app.post('/verification', async (req, res) => {
 		const payment = new Payment({ payment_status: payment_status, payment_date: payment_date, shop_id: shop_id, payment_plan: payment_plan });
 
 		await payment.save()
-			.then(payment_details= async () => {
+			.then(payment_details = async () => {
 				const details = payment_details;
 				console.log("payment done and details are ===>", payment_details);
 				await vendorshop.findByIdAndUpdate(shop_id, { $set: { shop_status: "active" } }, { new: true })
@@ -137,7 +154,7 @@ app.post('/verification', async (req, res) => {
 
 
 
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 80;
 
 
 // Start the server @ port

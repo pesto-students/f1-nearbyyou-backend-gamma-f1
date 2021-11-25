@@ -11,7 +11,19 @@ exports.category = async (req, res, next) => {
 
         let data = ''
         if (search) {
-            data = await Category.find({ name: search });
+            console.log("In search API");
+            // data = await Category.find({ name: `/${search}/`});
+            data = await Category.aggregate(
+                [
+                    {
+                        '$match': {
+                            'name': {
+                                '$regex': new RegExp(search)
+                            }
+                        }
+                    }
+                ]
+            )
         } else {
             data = await Category.find({});
         }
@@ -215,7 +227,18 @@ exports.plan = async (req, res, next) => {
         const { search } = req.body
         let data = ''
         if (search) {
-            data = await Plan.find({ name: search });
+            // data = await Plan.find({ name: search });
+            data = await Plan.aggregate(
+                [
+                    {
+                        '$match': {
+                            'name': {
+                                '$regex': new RegExp(search)
+                            }
+                        }
+                    }
+                ]
+            )
         } else {
             data = await Plan.find({});
         }
@@ -415,7 +438,7 @@ exports.changePlanStatus = async (req, res, next) => {
 exports.vendorList = async (req, res, next) => {
     try {
 
-        const { type, search } = req.body;
+        const { type, search, todays } = req.body;
 
         let query = []
         if (search) {
@@ -423,6 +446,14 @@ exports.vendorList = async (req, res, next) => {
         }
         if (type) {
             query.push({ shop_status: type });
+        }
+
+        if (todays) {
+            query.push({
+                updatedAt: {
+                    $gt: new Date(Date.now() - 24 * 60 * 60 * 1000)
+                }
+            });
         }
 
         console.log("Tyep :- ", req.body);
@@ -455,6 +486,13 @@ exports.vendorList = async (req, res, next) => {
                         'localField': 'vendorDetails.user_id',
                         'foreignField': '_id',
                         'as': 'userDetails'
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'services',
+                        'localField': '_id',
+                        'foreignField': 'service_owner',
+                        'as': 'serviceDetails'
                     }
                 }
             ]
