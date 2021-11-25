@@ -19,7 +19,7 @@ const new_ticket_cron = cron.schedule("0 */6 * * *", async function () {
 }, {
     scheduled: false
 });
-new_ticket_cron.start();
+// new_ticket_cron.start();
 
 
 const holding_ticket_cron = cron.schedule("0 */6 * * *", async function () {
@@ -40,7 +40,7 @@ const holding_ticket_cron = cron.schedule("0 */6 * * *", async function () {
 }, {
     scheduled: false
 });
-holding_ticket_cron.start();
+// holding_ticket_cron.start();
 
 
 
@@ -63,6 +63,6 @@ const new_shop_cron = cron.schedule("0 */6 * * *", async function () {
 }, {
     scheduled: false
 });
- new_shop_cron.start();
+//  new_shop_cron.start();
 
 
